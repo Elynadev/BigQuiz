@@ -47,10 +47,13 @@
 
                 questionContainer.innerHTML = `
                 <h2 class="text-lg font-semibold mb-2 fade-in">${questionData.question_text}</h2>
+                 <img src="${questionData.image}" alt="Image liée à la question " class="mb-4 w-full h-48 object-cover rounded-lg fade-in">
+              
                 <ul class="list-none p-0">
                     ${questionData.answers.map(answer => `
                                 <li class="mb-2 fade-in">
-                                    <button class="w-full text-left bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out" data-index="${answer.is_correct ? 'correct' : 'wrong'}">${answer.answer_text}</button>
+                                    <button class="w-full text-left bg-blue-500 text-white p-2 rounded hover:bg-green-600 
+                                    transition duration-300 ease-in-out" data-index="${answer.is_correct ? 'correct' : 'wrong'}">${answer.text}</button>
                                 </li>
                             `).join('')}
                 </ul>
@@ -58,7 +61,7 @@
             }
 
             // Fonction pour afficher les résultats
-            function showResults() {
+            function shoesults() {
                 const resultsContainer = document.getElementById('quiz-container');
                 resultsContainer.innerHTML = `
                 <h2 class="text-lg font-semibold mb-2 fade-in">Quiz Terminé !</h2>
@@ -80,9 +83,44 @@
                 300 ease-in-out" id="leaderboard-button">Leaderboard</button>
                  <button class="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-
                 300 ease-in-out" id="quit-button">Quitter</button>
+                 
+
+                  <button class="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-
+                 300 ease-in-out" id="share-button">Voir les répones </button>
+
+                 <p>
+                 kggf,kdg,df
+
+                
+                 </p>
+                 <p>
+                  
+                 </p>
+
+
                  `;
 
+
             }
+
+            function showResults() {
+    const resultsContainer = document.getElementById('quiz-container');
+    resultsContainer.innerHTML = `
+        <h2 class="text-lg font-semibold mb-2 fade-in">Quiz Terminé !</h2>
+        <p class="text-lg font-semibold mb-4 fade-in">Votre Score : ${correctAnswers} / ${questions.length}</p>
+        
+        <button class="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 ease-in-out" id="submit-score-button">Soumettre le Score</button>
+        <button class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out" id="restart-button">Recommencer</button>
+    `;
+
+    // Remplir le champ caché du score
+    document.getElementById('final-score').value = correctAnswers;
+
+    // Écouteur pour soumettre le score
+    document.getElementById('submit-score-button').onclick = function() {
+        document.getElementById('score-form').submit();
+    };
+}
 
             // Écouteur d'événements pour les clics sur les réponses
             document.getElementById('quiz-container').addEventListener('click', function(event) {

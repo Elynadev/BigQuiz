@@ -25,8 +25,10 @@ class AdminController extends Controller {
 
     public function store(Request $request)
     {
+    
         try {
             // Validation des données
+            dd($request);
             $request->validate([
                 'questions' => 'required|array',
                 'questions.*.question_text' => 'required|string|max:255',
