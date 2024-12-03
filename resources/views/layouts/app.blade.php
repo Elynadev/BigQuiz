@@ -29,8 +29,7 @@
                                 <a href="{{ route('dashboard') }}" class="text-gray-900 hover:text-gray-700">Dashboard</a>
                                 <a href="{{ route('admin.index') }}" class="text-gray-900 hover:text-gray-700">Questions</a>
                                 <a href="{{ route('admin.results') }}" class="text-gray-900 hover:text-gray-700">Résultats</a>
-                                <a href="{{ route('profile.edit') }}" class="text-gray-900 hover:text-gray-700">Profil</a>
-                                <form method="POST" action="{{ route('logout') }}">
+                                <a href="{{ route('profile.profil') }}">Profil</a>                                <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="text-gray-900 hover:text-gray-700">Déconnexion</button>
                                 </form>
