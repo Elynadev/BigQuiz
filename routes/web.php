@@ -4,6 +4,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultControler;
 use Illuminate\Support\Facades\Route;
@@ -23,7 +24,7 @@ Route::middleware('auth')->group(function () {
     // Route pour le profil de l'utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+   Route::get('/profile', [ProfileController::class, 'show'])->name('profile.profil')->middleware('auth');    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Routes pour la gestion des questions
     Route::prefix('admin')->group(function () {
