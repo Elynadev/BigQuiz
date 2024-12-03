@@ -24,9 +24,9 @@
     </div>
    
     <div class="flex items-center justify-center bg-gray-100">
-    <a href="/"
-       class="mt-2 inline-block  ml-[300px] w-[300px] mr-32 bg-red-500 text-black px-6 py-3 text-center rounded-lg 
-              hover:bg-red-300 animate-scale">
+    <a href="/answer"
+       class="mt-2 inline-block  ml-[300px] w-[300px] mr-32 bg-blue-500 text-black px-6 py-3 text-center rounded-lg 
+              hover:bg-blue-300 animate-scale">
        Let's start game
     </a>
 </div>
