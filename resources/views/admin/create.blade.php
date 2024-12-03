@@ -4,19 +4,24 @@
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-6">Créer une Question</h1>
 
-    <form action="{{ route('admin.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form action="{{ route('admin.store') }}" method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         @csrf
         <div class="mb-4">
             <label for="question_text" class="block text-gray-700 text-sm font-bold mb-2">Question</label>
-            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="question_text" required>
+            <input type="text" id="question_text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="question_text" required>
+        </div>
+
+        <div class="mb-4">
+            <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image (optionnelle)</label>
+            <input type="file" id="image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="image" accept="image/*">
         </div>
 
         <div id="answers">
             <div class="mb-4">
                 <label for="answer_text" class="block text-gray-700 text-sm font-bold mb-2">Réponse 1</label>
-                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[0][text]" required>
+                <input type="text" id="answer_text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[0][text]" required>
                 <div class="mt-2">
-                    <input type="checkbox" name="answers[0][is_correct]" class="mr-2 leading-tight"> 
+                    <input type="checkbox"  name="answers[0][is_correct]" class="mr-2 leading-tight"> 
                     <span class="text-sm text-gray-600">Correcte</span>
                 </div>
             </div>
@@ -36,7 +41,7 @@
         const newAnswer = `
             <div class="mb-4">
                 <label for="answer_text" class="block text-gray-700 text-sm font-bold mb-2">Réponse ${index + 1}</label>
-                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[${index}][text]" required>
+                <input type="text" id="answer_text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[${index}][text]" required>
                 <div class="mt-2">
                     <input type="checkbox" name="answers[${index}][is_correct]" class="mr-2 leading-tight"> 
                     <span class="text-sm text-gray-600">Correcte</span>

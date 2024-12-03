@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <h1 class="text-4xl font-bold mb-6 text-blue-700 text-center">Liste des Questions</h1>
-    <a href="{{ route('admin.create') }}" class="bg-gradient-to-r from-green-400 to-green-600 text-white font-bold py-2 
-    px-6 rounded-lg mb-4 inline-block transition duration-300 hover:from-green-500 hover:to-green-700 shadow-md">Ajouter une Question</a>
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-6">Liste des Questions Actives</h1>
+    <a href="{{ route('admin.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Ajouter une Question</a>
 
     @if(session('success'))
         <div class="bg-green-300 border border-green-600 text-green-800 p-4 rounded-lg mb-4 shadow-md">
@@ -12,34 +11,51 @@
         </div>
     @endif
 
-    <div class="flex justify-center">
-        <div class="overflow-x-auto rounded-lg shadow-lg w-full max-w-4xl">
-            <table class="min-w-full bg-white border border-gray-800 rounded-lg shadow-md">
-                <thead class="bg-blue-200 text-gray-800">
-                    <tr>
-                        <th class="py-3 px-4 border-b border-gray-300 text-left">Question</th>
-                        <th class="py-3 px-4 border-b border-gray-300 text-left">Actif</th>
-                        <th class="py-3 px-4 border-b border-gray-300 text-left">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($questions as $question)
-                        <tr class="hover:bg-blue-50 transition duration-200">
-                            <td class="py-3 px-4 border-b border-gray-300">{{ $question->question_text }}</td>
-                            <td class="py-3 px-4 border-b border-gray-300">{{ $question->is_active ? 'Oui' : 'Non' }}</td>
-                            <td class="py-3 px-4 border-b border-gray-300 flex space-x-2">
-                                <a href="{{ route('admin.edit', $question) }}" class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-1 px-3 rounded-lg transition duration-300 shadow">Modifier</a>
-                                <form action="{{ route('admin.destroy', $question) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="bg-red-400 hover:bg-red-500 text-white font-bold py-1 px-3 rounded-lg transition duration-300 shadow" type="submit">Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    @if($questions->isEmpty())
+        <div class="bg-yellow-200 border border-yellow-600 text-yellow-600 p-3 rounded mb-4">
+            Aucune question active trouvée.
         </div>
-    </div>
+    @else
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($questions as $question)
+                <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-md">
+                    <h2 class="text-lg font-bold mb-2">{{ $question->question_text }}</h2>
+                    @if($question->image)
+                        <img src="{{ asset('storage/' . $question->image) }}" alt="Image de la question" class="w-full h-32 object-cover rounded mb-2">
+                    @endif
+                    <p class="text-gray-700 mb-2">{{ $question->is_active ? 'Actif' : 'Inactif' }}</p>
+
+                    <div class="mb-4">
+                        <h3 class="text-md font-semibold mb-2">Réponses :</h3>
+                        <ul class="list-disc pl-5">
+                            @forelse($question->answers as $answer)
+                                <li class="text-gray-600">{{ $answer->text }} 
+                                    @if($answer->is_correct)
+                                        <span class="text-green-500 font-bold">(Correcte)</span>
+                                    @endif
+                                </li>
+                            @empty
+                                <li class="text-gray-600">Aucune réponse disponible.</li>
+                            @endforelse
+                        </ul>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <a href="{{ route('admin.edit', $question) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Modifier</a>
+                        <form action="{{ route('admin.destroy', $question) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" type="submit">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Liens de pagination -->
+        <div class="mt-4">
+            {{ $questions->links('vendor.pagination.tailwind') }} <!-- Utilise le style Tailwind pour les liens de pagination -->
+        </div>
+    @endif
 </div>
 @endsection

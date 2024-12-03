@@ -2,24 +2,21 @@
 
 namespace Database\Factories;
 
+use App\Models\Result; // Assurez-vous que le bon modèle est importé
 use App\Models\User;
+use App\Models\Question;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Result>
- */
 class ResultFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Result::class;
+
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(), // Crée un utilisateur fictif
-            'score' => $this->faker->numberBetween(0, 100), // Score aléatoire entre 0 et 100
+            'user_id' => User::factory(),
+            'question_id' => Question::factory(),
+            'score' => $this->faker->numberBetween(0, 100),
         ];
     }
 }
