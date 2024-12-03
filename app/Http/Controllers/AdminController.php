@@ -29,6 +29,32 @@ class AdminController extends Controller {
         return redirect()->route('admin.index')->with('success', 'Question créée avec succès.');
     }
 
+
+    // public function store(Request $request) {
+    //     // Validation des données
+    //     $request->validate([
+    //         'question_text' => 'required|string|max:255',
+    //         'is_active' => 'boolean',
+    //         'answers' => 'required|array',
+    //         'answers.*.text' => 'required|string|max:255',
+    //         'answers.*.is_correct' => 'sometimes|boolean', // Assurez-vous que c'est un booléen
+    //     ]);
+    
+    //     // Création de la question
+    //     $question = Question::create($request->only('question_text', 'is_active'));
+    
+    //     // Insertion des réponses
+    //     foreach ($request->answers as $answer) {
+    //         Answer::create([
+    //             'question_id' => $question->id,
+    //             'answer_text' => $answer['text'],
+    //             'is_correct' => isset($answer['is_correct']) && $answer['is_correct'] === '1', // Convertir en booléen
+    //         ]);
+    //     }
+    
+    //     return redirect()->route('admin.index')->with('success', 'Question créée avec succès.');
+    // }
+
     public function edit(Question $question) {
         return view('admin.edit', compact('question'));
     }

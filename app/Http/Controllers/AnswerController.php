@@ -3,9 +3,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+
+use App\Models\Question;
 class AnswerController extends Controller
 {
-     public function index(): View
+     public function inde(): View
     {
 
         $questions = [
@@ -30,5 +32,13 @@ class AnswerController extends Controller
         ];
 
         return view('answer',  ['questions' => $questions]);
+    }
+
+
+    public function index()
+    {
+        // Récupérer les questions actives avec leurs réponses
+        $questions = Question::with('answers')->where('is_active', true)->get();
+        return view('answer', compact('questions'));
     }
 }
