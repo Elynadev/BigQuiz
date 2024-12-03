@@ -3,6 +3,7 @@
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
 
