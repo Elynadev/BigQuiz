@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('question_text');
             $table->string('image')->nullable(); // Champ pour stocker l'image
+            $table ->json("reponses");
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

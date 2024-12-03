@@ -26,44 +26,61 @@ class AdminController extends Controller {
     public function store(Request $request)
     {
         try {
+            // dd($request->all());
+            $foramted_data = [];
+            array_push($foramted_data,["response"=>$request->answer_text,"is_correct"=>true]);
+            foreach ($request->answers as $false_answer) {
+                // dd($false_answer);
+                array_push($foramted_data,["response"=>$false_answer['text']??"","is_correct"=>$false_answer['is_correct']=="on"?true:false]);
+            }
+
             // Validation des données
-            $request->validate([
-                'questions' => 'required|array',
+            $validate = $request->validate([
+                
+               
                 'questions.*.question_text' => 'required|string|max:255',
                 'questions.*.image' => 'nullable|image|max:2048',
-                'questions.*.answers' => 'required|array',
-                'questions.*.answers.*.text' => 'required|string|max:255',
-                'questions.*.answers.*.is_correct' => 'boolean',
+                // 'questions.*.answers' => 'required|array',
+                // 'questions.*.answers.*.text' => 'required|string|max:255',
+                // 'questions.*.answers.*.is_correct' => 'boolean',
             ]);
-    
-            // Boucle à travers les questions
-            foreach ($request->input('questions') as $questionData) {
-                // Préparation des données de la question
-                $question = [
-                    'question_text' => $questionData['question_text'],
-                    'is_active' => true,
-                ];
-    
-                // Gestion de l'image
-                if (isset($questionData['image']) && $request->hasFile($questionData['image'])) {
-                    $question['image'] = $questionData['image']->store('images', 'public');
+            
+            $newQuestion = Question::create(attributes:[
+                "question_text"=>$request->question_text,
+                "image"=>  $request->image,
+                "reponses"=>json_encode($foramted_data) 
+            ]);
+            //    Gestion de l'image
+                if (isset( $request->image) && $request->hasFile( $request->image)) {
+                    $question['image'] = $request->image->store('images', 'public');
                 }
     
-                // Enregistrement de la question
-                $newQuestion = Question::create($question);
+            // // Boucle à travers les questions
+            // foreach ($request->input('questions') as $questionData) {
+            //     // Préparation des données de la question
+            //     $question = [
+            //         'question_text' => $questionData['question_text'],
+            //         'is_active' => true,
+            //     ];
     
-                // Enregistrement des réponses
-                foreach ($questionData['answers'] as $answer) {
-                    $newQuestion->answers()->create([
-                        'text' => $answer['text'],
-                        'is_correct' => isset($answer['is_correct']) ? $answer['is_correct'] : false,
-                    ]);
-                }
-            }
+            //  
+    
+            //     // Enregistrement de la question
+            //     $newQuestion = Question::create($question);
+    
+            //     // Enregistrement des réponses
+            //     foreach ($questionData['answers'] as $answer) {
+            //         $newQuestion->answers()->create([
+            //             'text' => $answer['text'],
+            //             'is_correct' => isset($answer['is_correct']) ? $answer['is_correct'] : false,
+            //         ]);
+            //     }
+            // }
     
             return redirect()->route('admin.index')->with('success', 'Questions créées avec succès.');
     
         } catch (\Exception $e) {
+            // dd($e);
             Log::error('Erreur lors de l\'enregistrement : ' . $e->getMessage());
             return redirect()->back()->withErrors('Une erreur est survenue : ' . $e->getMessage());
         }

@@ -19,7 +19,7 @@
         <div id="answers">
             <div class="mb-4">
                 <label for="answer_text" class="block text-gray-700 text-sm font-bold mb-2">Réponse 1</label>
-                <input type="text" id="answer_text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[0][text]" required>
+                <input type="text" id="answer_text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answer_text" required>
                 <div class="mt-2">
                     <input type="checkbox"  name="answers[0][is_correct]" class="mr-2 leading-tight"> 
                     <span class="text-sm text-gray-600">Correcte</span>
