@@ -5,8 +5,9 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\ResultControler;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ResultController;
 // Page d'accueil
 Route::get('/', function () {
     return view('welcome');
@@ -53,3 +54,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::get('/answer', [AnswerController::class, 'index']);
+Route::post('/results', [ResultControler::class, 'store'])->name('results.store');
