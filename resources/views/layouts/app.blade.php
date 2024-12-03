@@ -50,10 +50,10 @@
             </header>
         @endisset
 
-        <!-- Page Content -->
-        <main>
-            @yield('content') <!-- Utilisation de pour le contenu -->
-        </main>
-    </div>
-</body>
+            <!-- Page Content -->
+            <main>
+               @yield('content')
+            </main>
+        </div>
+    </body>
 </html>

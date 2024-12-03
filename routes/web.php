@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\QuizController;
@@ -47,3 +48,5 @@ Route::middleware('auth')->group(function () {
 
 // Authentification
 require __DIR__.'/auth.php';
+
+Route::get('/answer', [AnswerController::class, 'index']);

@@ -21,7 +21,7 @@ export default {
                 },
             },
             animation: {
-                scale: 'scale 5s ease-in-out infinite',
+                scale: 'scale 1s ease-in-out infinite',
             },
         },
     },
