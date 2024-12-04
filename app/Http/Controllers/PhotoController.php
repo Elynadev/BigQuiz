@@ -15,7 +15,7 @@ class PhotoController extends Controller
  
     public function store(ImagesRequest $request): View
     {
-        $request->image->store(config('images.path'), 'public');
+        $request->image->store('images');
          
         return view('photo_ok');
     }
