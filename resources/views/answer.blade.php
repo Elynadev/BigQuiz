@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="bg-gradient-to-r from-green-400 to-blue-500 font-roboto min-h-screen flex items-center justify-center">
+    <div class="bg-gradient-to-r from-green-400 to-blue-800 font-roboto min-h-screen flex items-center justify-center">
         <div class="container mx-auto p-4 max-w-md">
             <div class="bg-white shadow-lg rounded-lg p-6">
                 <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Jeu de Quiz</h1>
