@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/questions/edit/{question}', [AdminController::class, 'edit'])->name('admin.edit');
         Route::post('/questions/update/{question}', [AdminController::class, 'update'])->name('admin.update');
         Route::delete('/questions/{question}', [AdminController::class, 'destroy'])->name('admin.destroy');
+        Route::patch('admin/questions/{question}/toggle', [AdminController::class, 'toggle'])->name('admin.toggle');
         Route::get('/questions/{question}', [AdminController::class, 'show'])->name('admin.show'); // Afficher les détails d'une question
     });
 
@@ -57,3 +58,4 @@ require __DIR__.'/auth.php';
 
 Route::get('/answer', [AnswerController::class, 'index']);
 Route::post('/results', [ResultControler::class, 'store'])->name('results.store');
+

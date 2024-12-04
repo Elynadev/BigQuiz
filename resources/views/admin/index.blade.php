@@ -21,42 +21,48 @@
                 <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-md">
                     <h2 class="text-lg font-bold mb-2">Question : {{ $question->question_text }}</h2>
                     @if($question->image)
-                        <img src="{{ asset( $question->image) }}" alt="Image de la question" class="w-full h-32 object-cover rounded mb-2">
+                        <img src="{{ asset($question->image) }}" alt="Image de la question" class="w-full h-32 object-cover rounded mb-2">
                     @endif
                     <p class="text-gray-700 mb-2">{{ $question->is_active ? 'Actif' : 'Inactif' }}</p>
 
                     <div class="mb-4">
                         <h3 class="text-md font-semibold mb-2">Réponses :</h3>
-                       
-                        {{-- <p>{{ json_decode($question->reponses)[0]->response  }}</p> --}}
                         @php
-    // Décoder le JSON en tableau PHP
-    $answers = json_decode($question->reponses, true);
-@endphp
+                            $answers = json_decode($question->reponses, true);
+                        @endphp
 
-<ul class="list-disc pl-5">
-    @forelse($answers as $answer)
-        @if(!empty($answer['response'])) <!-- Vérification que la réponse n'est pas vide -->
-            <li class="text-gray-600">
-                {{ $answer['response'] }}
-                @if($answer['is_correct'])
-                    <span class="text-green-500 font-bold">(Correcte)</span>
-                @endif
-            </li>
-        @endif
-    @empty
-        <li class="text-gray-600">Aucune réponse disponible.</li>
-    @endforelse
-</ul>
-
+                        <ul class="list-disc pl-5">
+                            @forelse($answers as $answer)
+                                @if(!empty($answer['response']))
+                                    <li class="text-gray-600">
+                                        {{ $answer['response'] }}
+                                        @if($answer['is_correct'])
+                                            <span class="text-green-500 font-bold">(Correcte)</span>
+                                        @endif
+                                    </li>
+                                @endif
+                            @empty
+                                <li class="text-gray-600">Aucune réponse disponible.</li>
+                            @endforelse
+                        </ul>
                     </div>
 
-                    <div class="flex justify-between">
+                    <div class="flex justify-between mb-2">
                         <a href="{{ route('admin.edit', $question) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Modifier</a>
                         <form action="{{ route('admin.destroy', $question) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" type="submit">Supprimer</button>
+                        </form>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <form action="{{ route('admin.toggle', $question) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded" type="submit">
+                                {{ $question->is_active ? 'Désactiver' : 'Activer' }}
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -65,7 +71,7 @@
 
         <!-- Liens de pagination -->
         <div class="mt-4">
-            {{ $questions->links('vendor.pagination.tailwind') }} <!-- Utilise le style Tailwind pour les liens de pagination -->
+            {{ $questions->links('vendor.pagination.tailwind') }}
         </div>
     @endif
 </div>
