@@ -19,7 +19,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($questions as $question)
                 <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-md">
-                    <h2 class="text-lg font-bold mb-2">{{ $question->question_text }}</h2>
+                    <h2 class="text-lg font-bold mb-2">Question : {{ $question->question_text }}</h2>
                     @if($question->image)
                         <img src="{{ asset( $question->image) }}" alt="Image de la question" class="w-full h-32 object-cover rounded mb-2">
                     @endif
