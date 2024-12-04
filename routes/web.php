@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\QuizController;
-use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\ResultControler;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ResultController;
 // Page d'accueil
 Route::get('/', function () {
     return view('welcome');
@@ -21,7 +24,7 @@ Route::middleware('auth')->group(function () {
     // Route pour le profil de l'utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+   Route::get('/profile', [ProfileController::class, 'show'])->name('profile.profil')->middleware('auth');    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Routes pour la gestion des questions
     Route::prefix('admin')->group(function () {
@@ -51,3 +54,6 @@ Route::middleware('auth')->group(function () {
 
 // Authentification
 require __DIR__.'/auth.php';
+
+Route::get('/answer', [AnswerController::class, 'index']);
+Route::post('/results', [ResultControler::class, 'store'])->name('results.store');

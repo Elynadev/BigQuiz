@@ -27,7 +27,6 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        
         try {
             
             $foramted_data = [];
@@ -77,9 +76,7 @@ class AdminController extends Controller
         }
     }
 
-
-    public function edit(Question $question)
-    {
+    public function edit(Question $question) {
         return view('admin.edit', compact('question'));
     }
 

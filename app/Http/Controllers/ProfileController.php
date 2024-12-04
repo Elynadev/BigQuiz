@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-
+use App\Models\Result;
 class ProfileController extends Controller
 {
     /**
@@ -56,5 +56,19 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+    public function show()
+    {
+        // Récupérer l'utilisateur connecté
+        $user = Auth::user();
+    
+        // Récupérer les résultats associés à l'utilisateur
+        $results = Result::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+    
+        // Calculer le meilleur score
+        $bestScore = $results->max('score'); // Meilleur score
+    
+        // Passer l'utilisateur, les résultats et le meilleur score à la vue
+        return view('profile.profil', compact('user', 'results', 'bestScore'));
     }
 }

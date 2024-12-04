@@ -23,14 +23,13 @@
                     <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
                         <!-- Mobile menu button -->
                     </div>
-                    <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+                    <div class="flex-1 flex items-center  justify-center sm:items-stretch sm:justify-start">
                         <div class="hidden sm:block sm:ml-6">
                             <div class="flex space-x-4">
                                 <a href="{{ route('dashboard') }}" class="text-gray-900 hover:text-gray-700">Dashboard</a>
                                 <a href="{{ route('admin.index') }}" class="text-gray-900 hover:text-gray-700">Questions</a>
                                 <a href="{{ route('admin.results') }}" class="text-gray-900 hover:text-gray-700">Résultats</a>
-                                <a href="{{ route('profile.edit') }}" class="text-gray-900 hover:text-gray-700">Profil</a>
-                                <form method="POST" action="{{ route('logout') }}">
+                                <a href="{{ route('profile.profil') }}">Profil</a>                                <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="text-gray-900 hover:text-gray-700">Déconnexion</button>
                                 </form>
