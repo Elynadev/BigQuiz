@@ -78,7 +78,7 @@
         </div>
 
         <!-- Liens de pagination -->
-        <div class="mt-4">
+        <div class="mt-4 text-center">
             {{ $questions->links('vendor.pagination.tailwind') }}
         </div>
     @endif
