@@ -5,7 +5,7 @@
     
     <div class="flex flex-col items-center justify-center h-full">
         <!-- Animated Letters -->
-        <div id="animated-letters" class="text-center text-6xl font-extrabold mb-8" style="color: #e0ff20;"></div>
+        <div id="animated-letters" class="text-center text-6xl font-extrabold mb-8" style="color: #fffff;"></div>
 
         <div class="bg-white bg-opacity-90 w-full max-w-md mx-auto shadow-lg rounded-lg transition transform hover:scale-105 duration-300 ease-in-out p-6 mb-8 yoyo">
             <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-4" style="color: #2df20a;">Commençons le test !</h1>
@@ -42,7 +42,7 @@
     anime({
         targets: '#animated-letters span',
         translateY: [-50, 0],
-        opacity: [0, 1],
+        opacity: [1, 0,5 , 0],
         duration: 500,
         easing: 'easeOutExpo',
         delay: anime.stagger(100) // delay between each letter
