@@ -47,7 +47,7 @@
 
             // Fonction pour charger une question
             function loadQuestion() {
-                const questionContainer = document.getElementById('question-container');
+                const questionContainer = document.getElementById('question-container');aa
                 const questionData = questions[currentQuestionIndex];
 
                 questionContainer.innerHTML = `
@@ -56,7 +56,7 @@
                 <ul class="list-none p-0">
                     ${questionData.answers.map(answer => `
                         <li class="mb-2 fade-in">
-                            <button class="w-full text-left bg-blue-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 ease-in-out" data-index="${answer.is_correct ? 'correct' : 'wrong'}">${answer.text}</button>
+                            <button class="w-full text-left bg-blue-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 ease-in-out" data-index="${answer.is_correct ? 'correct' : 'wrong'}">${questions.reponses}</button>
                         </li>
                     `).join('')}
                 </ul>

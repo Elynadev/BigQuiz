@@ -6,7 +6,7 @@
     <a href="{{ route('admin.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Ajouter une Question</a>
 
     @if(session('success'))
-        <div class="bg-green-300 border border-green-600 text-green-800 p-4 rounded-lg mb-4 shadow-md">
+        <div class="bg-green-200 border border-green-600 text-green-600 p-3 rounded mb-4">
             {{ session('success') }}
         </div>
     @endif
