@@ -37,7 +37,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
                     <div class="flex-shrink-0">
-                        <h1 class="multicolor-text text-4xl font-bold">BigQuiz</h1>
+                        <h1 class="multicolor-text text-4xl font-bold">BigGame</h1>
                     </div>
                     <div class="hidden sm:block">
                         <div class="flex space-x-4">
