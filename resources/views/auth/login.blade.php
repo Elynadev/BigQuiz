@@ -9,6 +9,7 @@
 <body class="flex items-center justify-center min-h-screen bg-gradient-to-r
  from-green-400 to-blue-800 font-roboto ">
     <div class="max-w-md w-full mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-4">{{ __('Connectez-vous à votre compte') }}</h2>
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -30,19 +31,19 @@
             <div class="block mt-4">
                 <label for="remember_me" class="inline-flex items-center">
                     <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                    <span class="ms-2 text-sm text-blue-600">{{ __('Remember me') }}</span>
                 </label>
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                <!-- @if (Route::has('password.request'))
+                    <a class=" text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </a>
-                @endif
+                @endif -->
 
                 <x-primary-button class="ms-3">
-                    {{ __('Log in') }}
+                    {{ __('LOG IN') }}
                 </x-primary-button>
             </div>
         </form>
