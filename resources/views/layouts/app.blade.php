@@ -60,13 +60,7 @@
 </nav>
 
 
-Esther Akissohe
-User::create([
-.     'name' => 'Admin2',
-.     'email' => 'admin2@example.com',
-.     'password' => bcrypt('12345678'),
-.     'role' => 'admin',
-. ]);
+
 
 
 
