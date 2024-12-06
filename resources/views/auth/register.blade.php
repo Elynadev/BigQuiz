@@ -8,7 +8,9 @@
 </head>
 <body class="flex items-center justify-center min-h-screen  bg-gradient-to-r
  from-green-400 to-blue-800 font-roboto">
-    <div class="max-w-md w-full mx-auto bg-white p-6 rounded-lg shadow-md">
+ <div class="max-w-md w-full mx-auto bg-white p-6 rounded-lg shadow-md">
+ <h2 class="text-2xl font-bold text-center mb-4">{{ __('Créer votre compte ici') }}</h2>
+
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
@@ -39,12 +41,12 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
+                <a class=" text-sm text-blue-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+                    {{ __('Already registred?') }}
                 </a>
 
                 <x-primary-button class="ms-4">
-                    {{ __('Register') }}
+                    {{ __("Register") }}
                 </x-primary-button>
             </div>
         </form>
