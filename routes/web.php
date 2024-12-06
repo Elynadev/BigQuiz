@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/questions/edit/{question}', [AdminController::class, 'edit'])->name('admin.edit');
         Route::post('/questions/update/{question}', [AdminController::class, 'update'])->name('admin.update');
         Route::delete('/questions/{question}', [AdminController::class, 'destroy'])->name('admin.destroy');
+        Route::patch('admin/questions/{question}/toggle', [AdminController::class, 'toggle'])->name('admin.toggle');
         Route::get('/questions/{question}', [AdminController::class, 'show'])->name('admin.show'); // Afficher les détails d'une question
     });
 
@@ -47,6 +48,7 @@ Route::middleware('auth')->group(function () {
     // Routes pour les résultats
     Route::get('/admin/results', [AdminController::class, 'results'])->name('admin.results'); // Liste des résultats
     // Ajoute d'autres routes pour le traitement des résultats si nécessaire
+    
     Route::get('/photo', [PhotoController::class, 'create']);
     Route::post('/photo', [PhotoController::class, 'store']);
 });
@@ -56,3 +58,4 @@ require __DIR__.'/auth.php';
 
 Route::get('/answer', [AnswerController::class, 'index']);
 Route::post('/results', [ResultControler::class, 'store'])->name('results.store');
+
