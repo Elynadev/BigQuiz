@@ -1,114 +1,199 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="bg-gradient-to-r from-green-400 to-blue-800 font-roboto min-h-screen flex items-center justify-center">
-        <div class="container mx-auto p-4 max-w-md">
-            <div class="bg-white shadow-lg rounded-lg p-6">
-                <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Jeu de Quiz</h1>
-                <div id="quiz-container">
-                    <div id="question-container"></div>
-                </div>
+<div class="bg-gradient-to-r from-green-400 to-blue-800 font-roboto min-h-screen flex items-center justify-center">
+    <div class="container mx-auto p-4 max-w-lg">
+        <div class="bg-white shadow-lg rounded-lg p-6">
+            <h1 class="text-4xl font-bold mb-6 text-center text-gray-800">Jeu de Quiz</h1>
+            <div id="quiz-container" class="fade-in transition-opacity duration-500">
+                <div id="question-container"></div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Formulaire caché pour soumettre le score -->
-    <form id="score-form" action="{{ route('results.store') }}" method="POST" style="display: none;">
-        @csrf
-        <input type="hidden" name="score" id="final-score" value="">
-    </form>
+<!-- Formulaire caché pour soumettre le score -->
+<form id="score-form" action="{{ route('results.store') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="score" id="final-score" value="">
+</form>
 
-    <!-- Inclus les fichiers CSS nécessaires -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<!-- Inclus les fichiers CSS nécessaires -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <style>
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+<style>
+    .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        to {
+            opacity: 1;
         }
-    </style>
+    }
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const questions = @json($questions); // Passer les questions de PHP à JavaScript
+    button {
+        transition: background-color 0.3s, transform 0.2s;
+    }
 
-            let currentQuestionIndex = 0;
-            let correctAnswers = 0;
+    button:hover {
+        transform: scale(1.05);
+    }
 
-            // Fonction pour charger une question
-            function loadQuestion() {
-                const questionContainer = document.getElementById('question-container');aa
-                const questionData = questions[currentQuestionIndex];
+    .question-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
 
-                questionContainer.innerHTML = `
-                <h2 class="text-lg font-semibold mb-2 fade-in">${questionData.question_text}</h2>
-                <img src="${questionData.image}" alt="Image liée à la question" class="mb-4 w-full h-48 object-cover rounded-lg fade-in">
+    .answer-button {
+        background-color: #4f83cc;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        width: 100%;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .answer-button.correct {
+        background-color: #38a169; /* Vert pour la bonne réponse */
+    }
+
+    .answer-button.wrong {
+        background-color: #e53e3e; /* Rouge pour la mauvaise réponse */
+    }
+
+    .answer-button:hover {
+        background-color: #3182ce; /* Couleur au survol */
+    }
+
+    .result-card {
+        background-color: #f9fafb;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 8px; /* Espacement entre les cartes */
+        flex: 1 1 calc(25% - 16px); /* 4 cartes par rangée avec un espacement */
+        box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur totale */
+    }
+
+    .result-grid {
+        display: flex;
+        flex-wrap: wrap; /* Permet aux cartes de passer à la ligne suivante */
+        justify-content: space-between; /* Espace entre les cartes */
+    }
+</style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const questions = @json($questions); // Passer les questions de PHP à JavaScript
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        // Fonction pour charger une question
+        function loadQuestion() {
+            const questionContainer = document.getElementById('question-container');
+            const questionData = questions[currentQuestionIndex];
+
+            // Parser les réponses (clé `reponses` est une chaîne JSON)
+            const answers = JSON.parse(questionData.reponses || '[]');
+
+            // Filtrer les réponses pour exclure les champs vides ou null
+            const filteredAnswers = answers.filter(answer => answer.response !== null && answer.response.trim() !== '');
+
+            // Générer le HTML de la question et des réponses
+            questionContainer.innerHTML = `
+                <h2 class="question-text fade-in">${questionData.question_text}</h2>
+                <img src="${questionData.image}" alt="Image liée à la question" class="mb-4 w-full h-48 object-cover rounded-lg fade-in shadow-md">
                 <ul class="list-none p-0">
-                    ${questionData.answers.map(answer => `
+                    ${filteredAnswers.map(answer => `
                         <li class="mb-2 fade-in">
-                            <button class="w-full text-left bg-blue-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 ease-in-out" data-index="${answer.is_correct ? 'correct' : 'wrong'}">${questions.reponses}</button>
+                            <button 
+                                class="answer-button" 
+                                data-index="${answer.is_correct ? 'correct' : 'wrong'}" 
+                                data-correct="${answers.find(a => a.is_correct).response}">
+                                ${answer.response}
+                            </button>
                         </li>
                     `).join('')}
                 </ul>
             `;
-            }
+        }
 
-            // Fonction pour afficher les résultats
-            function showResults() {
-                const resultsContainer = document.getElementById('quiz-container');
-                resultsContainer.innerHTML = `
-                    <h2 class="text-lg font-semibold mb-2 fade-in">Quiz Terminé !</h2>
-                    <p class="text-lg font-semibold mb-4 fade-in">Votre Score : ${correctAnswers} / ${questions.length}</p>
-                    <button class="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 ease-in-out" id="submit-score-button">Soumettre le Score</button>
-                    <button class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out" id="restart-button">Recommencer</button>
+        // Fonction pour afficher les résultats
+        function showResults() {
+            const resultsContainer = document.getElementById('quiz-container');
+            const resultCards = questions.map((question, index) => {
+                const answers = JSON.parse(question.reponses || '[]');
+                const correctAnswersList = answers.filter(a => a.is_correct && a.response !== null);
+
+                // Si aucune réponse correcte n'est trouvée, ne pas afficher la carte
+                if (correctAnswersList.length === 0) return '';
+
+                const correctAnswer = correctAnswersList[0].response; // Prendre la première réponse correcte
+                return `
+                    <div class="result-card fade-in">
+                        <h3 class="font-semibold">Question ${index + 1}:</h3>
+                        <p class="question-text">${question.question_text}</p>
+                        <p class="text-gray-700">Réponse correcte: <strong>${correctAnswer}</strong></p>
+                    </div>
                 `;
+            }).join('');
 
-                // Remplir le champ caché du score
-                document.getElementById('final-score').value = correctAnswers;
+            resultsContainer.innerHTML = `
+                <h2 class="text-lg font-semibold mb-2 fade-in">Quiz Terminé !</h2>
+                <p class="text-lg font-semibold mb-4 fade-in">Votre Score : ${correctAnswers} / ${questions.length}</p>
+                <div class="result-grid">${resultCards}</div>
+                <button class="bg-green-500 text-white p-3 rounded hover:bg-green-600 transition duration-300 ease-in-out" id="submit-score-button">Soumettre le Score</button>
+                <button class="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300 ease-in-out" id="restart-button">Recommencer</button>
+            `;
 
-                // Écouteur pour soumettre le score
-                document.getElementById('submit-score-button').onclick = function() {
-                    document.getElementById('score-form').submit();
-                };
-            }
+            // Remplir le champ caché du score
+            document.getElementById('final-score').value = correctAnswers;
 
-            // Écouteur d'événements pour les clics sur les réponses
-            document.getElementById('quiz-container').addEventListener('click', function(event) {
-                if (event.target.tagName === 'BUTTON') {
-                    const selected = event.target.dataset.index;
+            // Écouteur pour soumettre le score
+            document.getElementById('submit-score-button').onclick = function() {
+                document.getElementById('score-form').submit();
+            };
 
-                    // Vérifiez si la réponse est correcte
-                    if (selected === 'correct') {
-                        correctAnswers++;
-                        event.target.classList.add('bg-green-500', 'text-white');
-                    } else {
-                        event.target.classList.add('bg-red-500', 'text-white');
-                    }
+            // Écouteur pour recommencer le quiz
+            document.getElementById('restart-button').onclick = function() {
+                location.reload();
+            };
+        }
 
-                    // Chargez la question suivante après un délai
-                    setTimeout(() => {
-                        currentQuestionIndex++;
-                        if (currentQuestionIndex < questions.length) {
-                            loadQuestion();
-                        } else {
-                            showResults();
-                        }
-                    }, 1000);
+        // Écouteur d'événements pour les clics sur les réponses
+        document.getElementById('quiz-container').addEventListener('click', function(event) {
+            if (event.target.tagName === 'BUTTON') {
+                const selected = event.target.dataset.index;
+
+                // Vérifiez si la réponse est correcte
+                if (selected === 'correct') {
+                    correctAnswers++;
+                    event.target.classList.add('correct');
+                } else {
+                    event.target.classList.add('wrong');
                 }
-            });
 
-            // Charger la première question
-            loadQuestion();
+                // Chargez la question suivante après un délai
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        loadQuestion();
+                    } else {
+                        showResults();
+                    }
+                }, 1000);
+            }
         });
-    </script>
+
+        // Charger la première question
+        loadQuestion();
+    });
+</script>
 @endsection

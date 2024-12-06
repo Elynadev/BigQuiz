@@ -27,6 +27,11 @@
             </div>
         </div>
 
+        <div class="mb-4">
+            <input type="checkbox" id="is_active" name="is_active" class="mr-2 leading-tight" checked>
+            <label for="is_active" class="text-sm text-gray-600">Activer la question</label>
+        </div>
+
         <div class="flex items-center justify-between mb-4">
             <button type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" id="add-answer">Ajouter une Réponse</button>
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Créer Question</button>

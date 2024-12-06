@@ -14,8 +14,7 @@ class AdminController extends Controller
     {
         // Récupérer uniquement les questions actives avec pagination
         $questions = Question::with('answers')
-            ->where('is_active', true)
-            ->paginate(10); // Remplace 10 par le nombre d'éléments que tu souhaites par page
+            ->paginate(12); // Remplace 10 par le nombre d'éléments que tu souhaites par page
 
         return view('admin.index', compact('questions'));
     }
@@ -27,59 +26,51 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        
         try {
-            
-            $foramted_data = [];
-
-            array_push($foramted_data, ["response" => $request->answer_text, "is_correct" => true]);
-
+            $formatted_data = [];
+    
+            // Ajout de la réponse correcte si elle existe
             if ($request->answers) {
-                
-                foreach ($request->answers as $false_answer) {
-
-                  // Ignorer les réponses vides
-                  if (empty($false_answer['text'])) {
-                    continue;
-}
-
-                    array_push($foramted_data, [
-                        "response" => $false_answer['text'] ?? 'Aucune réponse fournie',
-                        "is_correct" => isset($false_answer['is_correct']) && $false_answer['is_correct'] == "on" ? true : false
+                foreach ($request->answers as $answer) {
+                    if (empty($answer['text'])) {
+                        continue; // Ignorer les réponses vides
+                    }
+                    array_push($formatted_data, [
+                        "response" => $answer['text'],
+                        "is_correct" => isset($answer['is_correct']) ? true : false
                     ]);
-            // dd($foramted_data); // Vérifie que les réponses sont bien formatées
-
                 }
             }
-
+    
             // Validation des données
             $validate = $request->validate([
-                'questions.*.question_text' => 'required|string|max:255',
-                'questions.*.image' => 'nullable|image|max:2048',
+                'question_text' => 'required|string|max:255',
+                'image' => 'nullable|image|max:2048',
             ]);
-
+    
             // Stockage de l'image
-            $file = $request->image->store('public/images');
-            $url = Storage::url($file);
-
+            $url = null;
+            if ($request->hasFile('image')) {
+                $file = $request->image->store('public/images');
+                $url = Storage::url($file);
+            }
+    
             // Création de la question avec les réponses formatées
             $newQuestion = Question::create([
                 "question_text" => $request->question_text,
                 "image" => $url,
-                "reponses" => json_encode($foramted_data)
+                "reponses" => json_encode($formatted_data),
+                "is_active" => $request->has('is_active') // Active ou désactive la question
             ]);
-
-            return redirect()->route('admin.index')->with('success', 'Questions créées avec succès.');
+    
+            return redirect()->route('admin.index')->with('success', 'Question créée avec succès.');
         } catch (\Exception $e) {
-            dd($e);
             Log::error('Erreur lors de l\'enregistrement : ' . $e->getMessage());
             return redirect()->back()->withErrors('Une erreur est survenue : ' . $e->getMessage());
         }
     }
 
-
-    public function edit(Question $question)
-    {
+    public function edit(Question $question) {
         return view('admin.edit', compact('question'));
     }
 
@@ -119,4 +110,12 @@ class AdminController extends Controller
 
         return view('admin.results', compact('results')); // Passer les résultats à la vue
     }
+
+    public function toggle(Question $question)
+{
+    $question->is_active = !$question->is_active; // Inverse l'état d'activation
+    $question->save();
+
+    return redirect()->route('admin.index')->with('success', 'Statut de la question mis à jour avec succès.');
+}
 }
