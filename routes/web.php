@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
     // Routes pour les résultats
     Route::get('/admin/results', [AdminController::class, 'results'])->name('admin.results'); // Liste des résultats
     // Ajoute d'autres routes pour le traitement des résultats si nécessaire
+    
     Route::get('/photo', [PhotoController::class, 'create']);
     Route::post('/photo', [PhotoController::class, 'store']);
 });
