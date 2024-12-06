@@ -20,6 +20,7 @@
     @endif
 </head>
 <body >
+    
     <div class="min-h-screen bg-gradient-to-r
  from-green-400 to-blue-800 font-roboto grid place-items-center text-black/50 dark:bg-gray-800 dark:text-white/50">
         
@@ -29,6 +30,7 @@
               
                 <div class="bg-white p-6 rounded-lg shadow-md text-center">
     <h2 class="text-2xl font-bold mb-4">Prêt à commencer ?</h2>
+    
     <p class="mb-4">
         Inscrivez-vous ou connectez-vous dès maintenant pour débloquer des fonctionnalités exclusives et rejoindre notre communauté de quizzeurs passionnés.
     </p>
