@@ -1,9 +1,7 @@
-
 <?php
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
 
 use App\Models\Result;
 use Illuminate\Http\Request;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ResultsExport;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Result;
+use Maatwebsite\Excel\Facades\Excel;
 class ProfileController extends Controller
 {
     /**
@@ -71,4 +73,10 @@ class ProfileController extends Controller
         // Passer l'utilisateur, les résultats et le meilleur score à la vue
         return view('profile.profil', compact('user', 'results', 'bestScore'));
     }
+
+    public function exportResults()
+{
+    $user = Auth::user();
+    return Excel::download(new ResultsExport($user), 'resultats_' . $user->id . '.xlsx');
+}
 }

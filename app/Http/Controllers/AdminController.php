@@ -76,27 +76,35 @@ class AdminController extends Controller
 
     public function update(Request $request, Question $question)
     {
+        // Mise à jour de la question
         $question->update($request->only('question_text', 'is_active'));
-
-        // Mettre à jour les réponses
-        foreach ($request->answers as $answer) {
-            $existingAnswer = Answer::find($answer['id']);
-            if ($existingAnswer) {
-                $existingAnswer->update([
-                    'answer_text' => $answer['text'],
-                    'is_correct' => $answer['is_correct'] ?? false,
-                ]);
-            } else {
-                Answer::create([
-                    'question_id' => $question->id,
-                    'answer_text' => $answer['text'],
-                    'is_correct' => $answer['is_correct'] ?? false,
-                ]);
+    
+        // Vérifiez si le tableau des réponses existe
+        if (isset($request->answers)) {
+            foreach ($request->answers as $answer) {
+                // Assurez-vous que l'ID existe avant d'essayer de le trouver
+                if (isset($answer['id'])) {
+                    $existingAnswer = Answer::find($answer['id']);
+                    if ($existingAnswer) {
+                        // Mise à jour de la réponse existante
+                        $existingAnswer->update([
+                            'answer_text' => $answer['text'],
+                            'is_correct' => $answer['is_correct'] ?? false,
+                        ]);
+                    }
+                } else {
+                    // Création d'une nouvelle réponse si l'ID n'existe pas
+                    Answer::create([
+                        'question_id' => $question->id,
+                        'answer_text' => $answer['text'],
+                        'is_correct' => $answer['is_correct'] ?? false,
+                    ]);
+                }
             }
         }
+    
         return redirect()->route('admin.index')->with('success', 'Question mise à jour avec succès.');
     }
-
     public function destroy(Question $question)
     {
         $question->delete();
