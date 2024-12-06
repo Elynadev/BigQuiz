@@ -9,6 +9,18 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultControler;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResultController;
+
+
+use App\Http\Controllers\RoleController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/roles/create', [RoleController::class, 'createRoles']);
+    Route::post('/permissions/create', [RoleController::class, 'createPermissions']);
+    Route::post('/users/{userId}/assign-role', [RoleController::class, 'assignRoleToUser']);
+    Route::post('/roles/{roleId}/assign-permission', [RoleController::class, 'assignPermissionToRole']);
+});
+
+
 // Page d'accueil
 Route::get('/', function () {
     return view('welcome');
