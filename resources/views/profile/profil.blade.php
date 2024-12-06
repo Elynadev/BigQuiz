@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="container mx-auto w-full max-w-md p-6 mt-20 bg-white rounded-lg shadow-lg">
-    <h1 class="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-500 to-teal-500 rounded-lg p-4">Bienvenue sur votre profil, {{ $user->name }}</h1>
+    <h1 class="text-3xl font-bold text-center mb-6 text-white bg-gradient-to-r from-blue-500 to-teal-500 rounded-lg p-4">
+        Bienvenue sur votre profil, {{ $user->name }}
+    </h1>
     
     <ul class="list-disc pl-5 mb-6 text-gray-800">
         <li class="text-lg">Email: <span class="font-medium">{{ $user->email }}</span></li>
@@ -36,6 +38,19 @@
                 @endif
             </tbody>
         </table>
+    </div>
+
+    <div class="text-center">
+        <a href="{{ route('profile.export') }}" class="mt-4 inline-flex items-center gap-2 bg-blue-600 text-white px-1 py-1 rounded-full hover:bg-green-500">
+            <span class="font-medium text-xl">Exporter les résultats</span>
+            <div class="svg-container">
+                <svg width="20px" height="20px" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M768 810.7c-23.6 0-42.7-19.1-42.7-42.7s19.1-42.7 42.7-42.7c94.1 0 170.7-76.6 170.7-170.7 0-89.6-70.1-164.3-159.5-170.1L754 383l-10.7-22.7c-42.2-89.3-133-147-231.3-147s-189.1 57.7-231.3 147L270 383l-25.1 1.6c-89.5 5.8-159.5 80.5-159.5 170.1 0 94.1 76.6 170.7 170.7 170.7 23.6 0 42.7 19.1 42.7 42.7s-19.1 42.7-42.7 42.7c-141.2 0-256-114.8-256-256 0-126.1 92.5-232.5 214.7-252.4C274.8 195.7 388.9 128 512 128s237.2 67.7 297.3 174.2C931.5 322.1 1024 428.6 1024 554.7c0 141.1-114.8 256-256 256z" fill="#3688FF" />
+                    <path d="M512 938.7c-10.9 0-21.8-4.2-30.2-12.5l-128-128c-16.7-16.7-16.7-43.7 0-60.3 16.6-16.7 43.7-16.7 60.3 0l97.8 97.8 97.8-97.8c16.6-16.7 43.7-16.7 60.3 0 16.7 16.7 16.7 43.7 0 60.3l-128 128c-8.2 8.3-19.1 12.5-30 12.5z" fill="#5F6379" />
+                    <path d="M512 938.7c-23.6 0-42.7-19.1-42.7-42.7V597.3c0-23.6 19.1-42.7 42.7-42.7s42.7 19.1 42.7 42.7V896c0 23.6-19.1 42.7-42.7 42.7z" fill="#5F6379" />
+                </svg>
+            </div>
+        </a>
     </div>
 
     @if($bestScore)

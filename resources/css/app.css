@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Styles personnalisés */
+.svg-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px; /* Taille du cercle */
+    height: 40px; /* Taille du cercle */
+    border-radius: 50%; /* Cercle */
+    background-color: rgba(230, 184, 184, 0.2); /* Couleur de fond avec opacité */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre */
+    margin-left: 8px; /* Espace entre le texte et l'icône */
+}
