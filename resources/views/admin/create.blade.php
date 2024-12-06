@@ -18,13 +18,18 @@
 
         <div id="answers">
             <div class="mb-4">
-                <label for="answer_text" class="block text-gray-700 text-sm font-bold mb-2">Réponse 1</label>
-                <input type="text" id="answer_text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answer_text" required>
+                <label for="answer_text_0" class="block text-gray-700 text-sm font-bold mb-2">Réponse 1</label>
+                <input type="text" id="answer_text_0" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[0][text]" required>
                 <div class="mt-2">
-                    <input type="checkbox"  name="answers[0][is_correct]" class="mr-2 leading-tight"> 
+                    <input type="checkbox" name="answers[0][is_correct]" class="mr-2 leading-tight"> 
                     <span class="text-sm text-gray-600">Correcte</span>
                 </div>
             </div>
+        </div>
+
+        <div class="mb-4">
+            <input type="checkbox" id="is_active" name="is_active" class="mr-2 leading-tight" checked>
+            <label for="is_active" class="text-sm text-gray-600">Activer la question</label>
         </div>
 
         <div class="flex items-center justify-between mb-4">
@@ -40,8 +45,8 @@
         const index = answersDiv.children.length;
         const newAnswer = `
             <div class="mb-4">
-                <label for="answer_text" class="block text-gray-700 text-sm font-bold mb-2">Réponse ${index + 1}</label>
-                <input type="text" id="answer_text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[${index}][text]" required>
+                <label for="answer_text_${index}" class="block text-gray-700 text-sm font-bold mb-2">Réponse ${index + 1}</label>
+                <input type="text" id="answer_text_${index}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[${index}][text]" required>
                 <div class="mt-2">
                     <input type="checkbox" name="answers[${index}][is_correct]" class="mr-2 leading-tight"> 
                     <span class="text-sm text-gray-600">Correcte</span>
