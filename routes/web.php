@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultControler;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResultController;
 
@@ -39,6 +40,10 @@ Route::middleware('auth')->group(function () {
    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.profil')->middleware('auth');    
    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
    Route::get('/profile/export', [ProfileController::class, 'exportResults'])->name('profile.export');
+   Route::get('/users', [UserController::class, 'index'])->name('users.index');
+   Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+   Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // Route pour le formulaire
+   Route::post('/users', [UserController::class, 'store'])->name('users.store'); // Route pour enregistrer l'utilisateur
 
     // Routes pour la gestion des questions
     Route::prefix('admin')->group(function () {
