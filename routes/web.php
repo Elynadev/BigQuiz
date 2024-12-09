@@ -9,6 +9,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultControler;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\UserController;
 
 
 use App\Http\Controllers\RoleController;
@@ -61,6 +62,7 @@ Route::middleware('auth')->group(function () {
 
     // Routes pour les résultats
     Route::get('/admin/results', [AdminController::class, 'results'])->name('admin.results'); // Liste des résultats
+
     // Ajoute d'autres routes pour le traitement des résultats si nécessaire
     
     Route::get('/photo', [PhotoController::class, 'create']);
@@ -73,3 +75,8 @@ require __DIR__.'/auth.php';
 Route::get('/answer', [AnswerController::class, 'index']);
 Route::post('/results', [ResultControler::class, 'store'])->name('results.store');
 
+
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
