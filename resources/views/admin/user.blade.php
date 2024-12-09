@@ -47,7 +47,7 @@
                         <td class="py-3 px-6 border-r border-b border-gray-300">{{ $user->email }}</td>
                         <td class="py-3 px-6 border-r border-b border-gray-300">{{ $user->role }}</td>
                         <td class="py-3 px-6 border-b border-gray-300">
-                            <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline-block;">
+                            <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline-block;" class="delete-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition duration-150 ease-in-out">Supprimer</button>
@@ -64,4 +64,27 @@
         </table>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Empêche la soumission du formulaire
+            const userName = this.closest('tr').querySelector('td:nth-child(2)').innerText; // Récupère le nom de l'utilisateur
+            Swal.fire({
+                title: 'Êtes-vous sûr ?',
+                text: `Vous allez supprimer l'utilisateur ${userName}. Cette action est irréversible.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer !',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit(); // Soumet le formulaire si l'utilisateur confirme
+                }
+            });
+        });
+    });
+</script>
 @endsection
