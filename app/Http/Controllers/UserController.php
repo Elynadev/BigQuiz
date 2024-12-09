@@ -57,4 +57,36 @@ public function import(Request $request)
 
     return redirect()->back()->with('success', 'Utilisateurs importés avec succès.');
 }
+// Dans le contrôleur UserController
+public function edit($id)
+{
+    // Trouver l'utilisateur par son ID
+    $user = User::findOrFail($id);
+
+    // Retourner la vue avec l'utilisateur
+    return view('users.edit', compact('user'));
+}
+
+public function update(Request $request, $id)
+{
+    // Valider les données envoyées dans le formulaire
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $id,
+        // Ajoutez d'autres règles de validation selon vos besoins
+    ]);
+
+    // Trouver l'utilisateur par son ID
+    $user = User::findOrFail($id);
+
+    // Mettre à jour les informations de l'utilisateur
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        // Mettez à jour d'autres champs si nécessaire
+    ]);
+
+    // Rediriger avec un message de succès
+    return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+}
 }
