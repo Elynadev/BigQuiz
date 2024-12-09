@@ -47,6 +47,13 @@
                         <a href="{{ route('admin.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Questions</a>
                     @endif
 
+                    @if(auth()->user()->role === 'admin') <!-- Vérification du rôle -->
+                        <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Utilisateurs</a>
+                        @endif
+                    @if(auth()->user()->role === 'admin') <!-- Vérification du rôle -->
+                        <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Créer un utilisateur</a>
+                        @endif
+
                     <a href="{{ route('admin.results') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Résultats</a>
                     <a href="{{ route('profile.profil') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Profil</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
