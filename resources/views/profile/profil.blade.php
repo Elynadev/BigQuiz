@@ -8,7 +8,11 @@
     
     <ul class="list-disc pl-5 mb-6 text-gray-800">
         <li class="text-lg">Email: <span class="font-medium">{{ $user->email }}</span></li>
-        <li class="text-lg">Créé le: <span class="font-medium">{{ $user->created_at->format('d/m/Y') }}</span></li>
+        <li class="text-lg">Créé le: 
+            <span class="font-medium">
+                {{ $user->created_at ? $user->created_at->format('d/m/Y') : 'Non disponible' }}
+            </span>
+        </li>
         <li class="text-lg">Mis à jour le: <span class="font-medium">{{ $user->updated_at->format('d/m/Y') }}</span></li>
     </ul>
 

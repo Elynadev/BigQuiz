@@ -33,38 +33,32 @@
 <body class="font-sans antialiased bg-gray-100">
     <div class="min-h-screen">
        <!-- Navigation -->
-<nav class="bg-blue-600 border-b border-blue-700 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <div class="flex-shrink-0">
-                <h1 class="multicolor-text text-4xl font-bold">BigGame</h1>
-            </div>
-            <div class="hidden sm:block">
-                <div class="flex space-x-4">
-                    <a href="{{ route('dashboard') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Dashboard</a>
-
-                    @if(auth()->user()->role === 'admin') <!-- Vérification du rôle -->
-                        <a href="{{ route('admin.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Questions</a>
-                    @endif
-
-                    @if(auth()->user()->role === 'admin') <!-- Vérification du rôle -->
-                        <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Utilisateurs</a>
+       <nav class="bg-blue-600 border-b border-blue-700 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="multicolor-text text-4xl font-bold">BigGame</h1>
+                </div>
+                <div class="hidden sm:block">
+                    <div class="flex space-x-4">
+                        <a href="{{ route('dashboard') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Dashboard</a>
+    
+                        @if(auth()->user()->role === 'admin') <!-- Vérification du rôle -->
+                            <a href="{{ route('admin.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Questions</a>
+                            <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Utilisateurs</a> <!-- Lien vers la gestion des utilisateurs -->
                         @endif
-                    @if(auth()->user()->role === 'admin') <!-- Vérification du rôle -->
-                        <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Créer un utilisateur</a>
-                        @endif
-
-                    <a href="{{ route('admin.results') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Résultats</a>
-                    <a href="{{ route('profile.profil') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Profil</a>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="text-white hover:bg-red-500 px-3 py-2 rounded-md text-xl bg-green-600 font-medium">Déconnexion</button>
-                    </form>
+    
+                        <a href="{{ route('admin.results') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Résultats</a>
+                        <a href="{{ route('profile.profil') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Profil</a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-white hover:bg-red-500 px-3 py-2 rounded-md text-xl bg-green-600 font-medium">Déconnexion</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
 
 
