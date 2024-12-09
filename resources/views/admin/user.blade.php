@@ -5,7 +5,8 @@
     <h1 class="text-3xl font-bold mb-6 text-white text-center">Gestion des Utilisateurs</h1>
 
     <a href="{{ route('users.create') }}" class="bg-green-500 text-white py-2 px-4 rounded-md mb-4 inline-block">Créer un Utilisateur</a>
-
+    <a href="{{ route('users.export') }}" class="bg-blue-500 text-white py-2 px-4 rounded-md mb-4 inline-block">Exporter en Excel</a> <!-- Lien d'exportation -->
+    
     @if(session('success'))
         <div class="bg-green-500 text-white p-3 rounded mb-4 text-center">
             {{ session('success') }}
