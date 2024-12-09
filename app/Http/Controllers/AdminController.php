@@ -14,7 +14,7 @@ class AdminController extends Controller
     {
         // Récupérer uniquement les questions actives avec pagination
         $questions = Question::with('answers')
-            ->paginate(12); // Remplace 10 par le nombre d'éléments que tu souhaites par page
+            ->paginate(9); // Remplace 10 par le nombre d'éléments que tu souhaites par page
 
         return view('admin.index', compact('questions'));
     }

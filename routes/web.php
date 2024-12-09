@@ -4,14 +4,14 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
-
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ResultControler;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResultController;
-
-
 use App\Http\Controllers\RoleController;
+use App\Exports\UsersExport; // Ajout de l'export
+use Maatwebsite\Excel\Facades\Excel; // Ajout de la facade Excel
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/roles/create', [RoleController::class, 'createRoles']);
@@ -19,7 +19,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users/{userId}/assign-role', [RoleController::class, 'assignRoleToUser']);
     Route::post('/roles/{roleId}/assign-permission', [RoleController::class, 'assignPermissionToRole']);
 });
-
 
 // Page d'accueil
 Route::get('/', function () {
@@ -36,9 +35,18 @@ Route::middleware('auth')->group(function () {
     // Route pour le profil de l'utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-   Route::get('/profile', [ProfileController::class, 'show'])->name('profile.profil')->middleware('auth');    
-   Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-   Route::get('/profile/export', [ProfileController::class, 'exportResults'])->name('profile.export');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.profil')->middleware('auth');    
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/export', [ProfileController::class, 'exportResults'])->name('profile.export');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // Route pour le formulaire
+    Route::post('/users', [UserController::class, 'store'])->name('users.store'); // Route pour enregistrer l'utilisateur
+
+    // Route pour exporter les utilisateurs
+    Route::get('/users/export', function () {
+        return Excel::download(new UsersExport, 'utilisateurs.xlsx');
+    })->name('users.export'); // Route d'exportation
 
     // Routes pour la gestion des questions
     Route::prefix('admin')->group(function () {
@@ -72,4 +80,3 @@ require __DIR__.'/auth.php';
 
 Route::get('/answer', [AnswerController::class, 'index']);
 Route::post('/results', [ResultControler::class, 'store'])->name('results.store');
-
