@@ -47,6 +47,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/export', function () {
         return Excel::download(new UsersExport, 'utilisateurs.xlsx');
     })->name('users.export'); // Route d'exportation
+    
+      // Route pour afficher le formulaire d'importation
+      Route::get('/users/import', function () {
+        return view('admin.import-users'); // Vue pour le formulaire d'importation
+    })->name('users.import.view');
+
+    //Route pour importer les utilisateurs 
+    Route::post('/users/import', [UserController::class, 'import'])->name('users.import');
 
     // Routes pour la gestion des questions
     Route::prefix('admin')->group(function () {
