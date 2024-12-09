@@ -78,7 +78,7 @@ $user->password = bcrypt('22222222');
 $user->role = true;
 $user->save();
 
- $user = \App\Models\User::where('email', 'chris@gmail.com')->first();
+ $user = \App\Models\User::where('email', 'christy@gmail.com')->first();
   $user->password = Hash::make('44444444');
 use Carbon\Carbon; // Assurez-vous d'importer Carbon
 
