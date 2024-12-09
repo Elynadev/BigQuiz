@@ -1,52 +1,37 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-6">Modifier la Question</h1>
-
-    <form action="{{ route('admin.update', $question) }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        @csrf
-        <div class="mb-4">
-            <label for="question_text" class="block text-gray-700 text-sm font-bold mb-2">Question</label>
-            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="question_text" value="{{ $question->question_text }}" required>
-        </div>
-
-        <div id="answers">
-            @foreach($question->answers as $index => $answer)
-                <div class="mb-4">
-                    <label for="answer_text" class="block text-gray-700 text-sm font-bold mb-2">Réponse {{ $index + 1 }}</label>
-                    <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[{{ $index }}][text]" value="{{ $answer->answer_text }}" required>
-                    <div class="mt-2">
-                        <input type="checkbox" name="answers[{{ $index }}][is_correct]" {{ $answer->is_correct ? 'checked' : '' }} class="mr-2 leading-tight"> 
-                        <span class="text-sm text-gray-600">Correcte</span>
-                    </div>
-                    <input type="hidden" name="answers[{{ $index }}][id]" value="{{ $answer->id }}">
-                </div>
-            @endforeach
-        </div>
-
-        <div class="flex items-center justify-between mb-4">
-            <button type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" id="add-answer">Ajouter une Réponse</button>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Mettre à Jour la Question</button>
-        </div>
-    </form>
-</div>
-
-<script>
-    document.getElementById('add-answer').addEventListener('click', function() {
-        const answersDiv = document.getElementById('answers');
-        const index = answersDiv.children.length;
-        const newAnswer = `
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier l'utilisateur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="container mx-auto my-8 p-4 bg-white rounded shadow">
+        <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Modifier l'utilisateur</h1>
+        <form action="{{ route('users.update', $user->id) }}" method="POST">
+            @csrf
+            @method('PUT')
             <div class="mb-4">
-                <label for="answer_text" class="block text-gray-700 text-sm font-bold mb-2">Réponse ${index + 1}</label>
-                <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="answers[${index}][text]" required>
-                <div class="mt-2">
-                    <input type="checkbox" name="answers[${index}][is_correct]" class="mr-2 leading-tight"> 
-                    <span class="text-sm text-gray-600">Correcte</span>
-                </div>
+                <label for="name" class="block text-gray-700 font-bold mb-2">Nom :</label>
+                <input type="text" id="name" name="name" value="{{ $user->name }}" 
+                    class="w-full border border-gray-300 rounded px-4 py-2">
             </div>
-        `;
-        answersDiv.insertAdjacentHTML('beforeend', newAnswer);
-    });
-</script>
-@endsection
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-bold mb-2">Email :</label>
+                <input type="email" id="email" name="email" value="{{ $user->email }}" 
+                    class="w-full border border-gray-300 rounded px-4 py-2">
+            </div>
+            <div class="flex justify-between">
+                <a href="{{ route('users.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Annuler
+                </a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Sauvegarder
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+

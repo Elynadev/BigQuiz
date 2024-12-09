@@ -90,3 +90,5 @@ $user->is_admin = true; // Si vous avez un champ pour indiquer le rôle
 $user->created_at = Carbon::createFromFormat('Y-m-d H:i:s', '2023-01-01 12:00:00'); // Date de création
 $user->updated_at = Carbon::now(); // Date de mise à jour
 $user->save();
+
+
