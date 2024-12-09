@@ -110,18 +110,16 @@
 
 <style>
     @keyframes fade-in {
-        from {
+        0% {
             opacity: 0;
-            transform: translateY(-10px);
         }
-        to {
+        100% {
             opacity: 1;
-            transform: translateY(0);
         }
     }
 
     .animate-fade-in {
-        animation: fade-in 0.5s ease-out;
+        animation: fade-in 0.5s ease;
     }
 </style>
 @endsection
