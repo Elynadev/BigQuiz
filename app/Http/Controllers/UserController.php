@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
 
 class UserController extends Controller
 {
@@ -42,34 +44,17 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
-    }
+    return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
+}
 
-    public function edit($id)
-    {
-        // Trouver l'utilisateur par son ID
-        $user = User::findOrFail($id);
+public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls',
+    ]);
 
-        // Retourner la vue de l'édition avec l'utilisateur
-        return view('admin.edit', compact('user'));
-    }
+    Excel::import(new UsersImport, $request->file('file'));
 
-    public function update(Request $request, $id)
-    {
-        // Validation des données
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'role' => 'required|string',
-        ]);
-
-        // Trouver l'utilisateur
-        $user = User::findOrFail($id);
-
-        // Mettre à jour l'utilisateur
-        $user->update($validated);
-
-        // Rediriger avec un message de succès
-        return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
-    }
+    return redirect()->back()->with('success', 'Utilisateurs importés avec succès.');
+}
 }
