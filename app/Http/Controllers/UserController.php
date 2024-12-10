@@ -72,7 +72,7 @@ public function import(Request $request)
 
     return redirect()->route('users.index')->with('success', 'Utilisateurs importés avec succès.');
 }
-// Dans le contrôleur UserController
+
 public function edit($id)
 {
     // Trouver l'utilisateur par son ID
