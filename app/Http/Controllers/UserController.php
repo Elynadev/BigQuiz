@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class UserController extends Controller
 {
@@ -50,12 +51,30 @@ class UserController extends Controller
 public function import(Request $request)
 {
     $request->validate([
-        'file' => 'required|mimes:xlsx,xls',
+        'file' => 'required|file|mimes:xlsx,csv,xls',
     ]);
 
-    Excel::import(new UsersImport, $request->file('file'));
+    logger('Fichier reçu : ' . $request->file('file')->getClientOriginalName());
 
-    return redirect()->back()->with('success', 'Utilisateurs importés avec succès.');
+    $errors = [];
+
+    try {
+        Excel::import(new UsersImport, $request->file('file'));
+    } catch (ValidationException $e) {
+        foreach ($e->failures() as $failure) {
+            $message = "Erreur à la ligne {$failure->row()}: " . implode(", ", $failure->errors());
+            $errors[] = $message;
+        }
+    } catch (\Exception $e) {
+        logger('Erreur lors de l\'importation : ' . $e->getMessage());
+        return redirect()->route('users.index')->withErrors(['Erreur d\'importation : ' . $e->getMessage()]);
+    }
+
+    if (!empty($errors)) {
+        return redirect()->route('users.index')->withErrors($errors);
+    }
+
+    return redirect()->route('users.index')->with('success', 'Utilisateurs importés avec succès.');
 }
 // Dans le contrôleur UserController
 public function edit($id)
