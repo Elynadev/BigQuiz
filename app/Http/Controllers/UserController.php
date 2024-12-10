@@ -88,20 +88,21 @@ public function update(Request $request, $id)
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255|unique:users,email,' . $id,
-        // Ajoutez d'autres règles de validation selon vos besoins
+        'role' => 'required|string|in:user,admin',  // Ajouter la validation pour le rôle
     ]);
 
     // Trouver l'utilisateur par son ID
     $user = User::findOrFail($id);
 
-    // Mettre à jour les informations de l'utilisateur
+    // Mettre à jour les informations de l'utilisateur, y compris le rôle
     $user->update([
         'name' => $request->name,
         'email' => $request->email,
-        // Mettez à jour d'autres champs si nécessaire
+        'role' => $request->role,  // Ajouter la mise à jour du rôle
     ]);
 
     // Rediriger avec un message de succès
     return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
 }
+
 }
