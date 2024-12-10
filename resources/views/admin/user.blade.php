@@ -27,20 +27,20 @@
     </div>
 
     @if(session('success'))
-        <div class="bg-green-500 text-white p-3 rounded mb-4 text-center">
+        <div class="bg-green-500 text-white p-3 rounded mb-4 text-center" id="success-message">
             {{ session('success') }}
         </div>
     @endif
 
     @if(session('import_errors'))
-    <div class="bg-red-500 text-white p-3 rounded mb-4 text-center">
-        <ul>
-            @foreach (session('import_errors') as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+        <div class="bg-red-500 text-white p-3 rounded mb-4 text-center" id="error-message">
+            <ul>
+                @foreach (session('import_errors') as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white border-collapse border border-gray-300 rounded-lg shadow-md">
@@ -99,6 +99,24 @@
                 }
             });
         });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fonction pour masquer les messages après 3 secondes
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000); // 3000 millisecondes = 3 secondes
+        }
+
+        if (errorMessage) {
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000); // 3000 millisecondes = 3 secondes
+        }
     });
 </script>
 @endsection

@@ -53,16 +53,20 @@ public function import(Request $request)
         'file' => 'required|file|mimes:xlsx,csv,xls',
     ]);
 
+    logger('Fichier reçu : ' . $request->file('file')->getClientOriginalName());
+
     $errors = [];
 
     try {
         Excel::import(new UsersImport, $request->file('file'));
     } catch (ValidationException $e) {
-        $errors = $e->failures();
-        foreach ($errors as $failure) {
+        foreach ($e->failures() as $failure) {
             $message = "Erreur à la ligne {$failure->row()}: " . implode(", ", $failure->errors());
             $errors[] = $message;
         }
+    } catch (\Exception $e) {
+        logger('Erreur lors de l\'importation : ' . $e->getMessage());
+        return redirect()->route('users.index')->withErrors(['Erreur d\'importation : ' . $e->getMessage()]);
     }
 
     if (!empty($errors)) {
