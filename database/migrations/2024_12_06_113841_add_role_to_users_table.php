@@ -13,10 +13,9 @@ return new class extends Migration
   public function up()
 {
     Schema::table('users', function (Blueprint $table) {
-        $table->string('role'); // Ajoutez un rôle par défaut
+        $table->string('role')->default('user'); // Ajout d'une valeur par défaut
     });
-
-  
+    
 }
     /**
      * Reverse the migrations.
@@ -28,6 +27,4 @@ return new class extends Migration
         });
     }
 };
-
-
 

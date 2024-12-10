@@ -26,7 +26,7 @@ class UsersImport implements ToModel, WithHeadingRow
             'name'  => $row['nom'], // Assurez-vous que les clés correspondent aux en-têtes de votre fichier Excel
             'email' => $row['email'],
             'role'  => $row['role'],
-            'password' => bcrypt('password'), // Mettez un mot de passe par défaut ou gérez-le autrement
+            'password' => bcrypt('default_password'), // Mettez un mot de passe par défaut ou gérez-le autrement
         ]);
     }
 }

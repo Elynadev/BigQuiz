@@ -42,6 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // Route pour le formulaire
     Route::post('/users', [UserController::class, 'store'])->name('users.store'); // Route pour enregistrer l'utilisateur
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    
 
     // Route pour exporter les utilisateurs
     Route::get('/users/export', function () {
@@ -77,6 +80,7 @@ Route::middleware('auth')->group(function () {
 
     // Routes pour les résultats
     Route::get('/admin/results', [AdminController::class, 'results'])->name('admin.results'); // Liste des résultats
+
     // Ajoute d'autres routes pour le traitement des résultats si nécessaire
     
     Route::get('/photo', [PhotoController::class, 'create']);

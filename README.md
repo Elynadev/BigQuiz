@@ -64,3 +64,31 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+
+
+
+
+$user = new App\Models\User;
+$user->name = 'deb';
+$user->email = 'debyoa@gmail.com';
+$user->password = bcrypt('22222222');
+$user->role = true;
+$user->save();
+
+ $user = \App\Models\User::where('email', 'christy@gmail.com')->first();
+  $user->password = Hash::make('44444444');
+use Carbon\Carbon; // Assurez-vous d'importer Carbon
+
+$user = new App\Models\User;
+$user->name = 'Nom de l\'admin';
+$user->email = 'admin@example.com';
+$user->password = bcrypt('motdepasse'); // Hacher le mot de passe
+$user->is_admin = true; // Si vous avez un champ pour indiquer le rôle
+$user->created_at = Carbon::createFromFormat('Y-m-d H:i:s', '2023-01-01 12:00:00'); // Date de création
+$user->updated_at = Carbon::now(); // Date de mise à jour
+$user->save();
+
+
