@@ -43,6 +43,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create'); // Route pour le formulaire
     Route::post('/users', [UserController::class, 'store'])->name('users.store'); // Route pour enregistrer l'utilisateur
 
+    //Route pour soumission de text pour l'envoi de l'email
+    Route::post('/submit-text', [UserController::class, 'submitText'])->name('submit.text');
+    
+    
     // Route pour exporter les utilisateurs
     Route::get('/users/export', function () {
         return Excel::download(new UsersExport, 'utilisateurs.xlsx');

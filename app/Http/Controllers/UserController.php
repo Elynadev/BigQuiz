@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
 use Maatwebsite\Excel\Validators\ValidationException;
@@ -25,7 +26,8 @@ class UserController extends Controller
 
     public function create()
 {
-    return view('admin.create_user'); // Assurez-vous de créer cette vue
+    $users = User::all(); 
+    return view('admin.create_user', compact('users')); // Assurez-vous de créer cette vue
 }
 
 public function store(Request $request)
@@ -74,5 +76,29 @@ public function import(Request $request)
     }
 
     return redirect()->route('users.index')->with('success', 'Utilisateurs importés avec succès.');
+}
+
+public function submitText(Request $request)
+{
+    $request->validate([
+        'text' => 'required|string',
+        'recipient_email' => 'required|string|email',
+    ]);
+
+    $user = auth()->user(); // Récupération de l'utilisateur connecté
+    $submittedText = $request->input('text');
+    $recipientEmail = $request->input('recipient_email'); // Récupération de l'email du destinataire
+
+
+    // Envoi de l'email
+    Mail::send('emails.user_notification', [
+        'user' => $user,
+        'submittedText' => $submittedText,
+    ], function ($message) use ($recipientEmail, $user) {
+        $message->to($recipientEmail)
+                ->subject('Nouveau commentaire de ' . $user->name);
+    });
+
+    return back()->with('success', 'Commentaire soumis avec succès.');
 }
 }

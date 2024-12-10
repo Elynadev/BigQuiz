@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -39,6 +40,7 @@ class AnswerController extends Controller
     {
         // Récupérer les questions actives avec leurs réponses
         $questions = Question::with('answers')->where('is_active', true)->get();
-        return view('answer', compact('questions'));
+        $users = User::all();
+        return view('answer', compact('questions', 'users'));
     }
 }
