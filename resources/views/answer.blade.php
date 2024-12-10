@@ -18,6 +18,23 @@
     <input type="hidden" name="score" id="final-score" value="">
 </form>
 
+<!-- Toast Notification -->
+<div id="toast" class="hidden fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition-all duration-500">
+    Score envoyé avec succès !
+</div>
+
+<!-- Modal pour email -->
+<div id="email-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-4">Recevoir les résultats par email ?</h2>
+        <p>Souhaitez-vous recevoir vos résultats de quiz à l'adresse email associée à votre compte ?</p>
+        <div class="mt-4">
+            <button id="confirm-email" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Oui</button>
+            <button id="cancel-email" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Non</button>
+        </div>
+    </div>
+</div>
+
 <!-- Inclus les fichiers CSS nécessaires -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -85,6 +102,23 @@
         display: flex;
         flex-wrap: wrap; /* Permet aux cartes de passer à la ligne suivante */
         justify-content: space-between; /* Espace entre les cartes */
+    }
+
+    #toast {
+        opacity: 0;
+    }
+
+    #toast.show {
+        opacity: 1;
+    }
+
+    #email-modal {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    #email-modal.show {
+        opacity: 1;
     }
 </style>
 
@@ -158,6 +192,36 @@
 
             // Écouteur pour soumettre le score
             document.getElementById('submit-score-button').onclick = function() {
+                // Afficher le toast
+                const toast = document.getElementById('toast');
+                toast.classList.remove('hidden');
+                toast.classList.add('show');
+
+                // Masquer le toast après 1 seconde et afficher le modal
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    toast.classList.add('hidden');
+
+                    // Afficher le modal pour demander l'email
+                    const emailModal = document.getElementById('email-modal');
+                    emailModal.classList.remove('hidden');
+                    emailModal.classList.add('show');
+                }, 1000);
+            };
+
+            // Gestion des clics sur les boutons du modal
+            document.getElementById('confirm-email').onclick = function() {
+                // Envoyer le formulaire avec l'email
+                document.getElementById('score-form').submit();
+            };
+
+            document.getElementById('cancel-email').onclick = function() {
+                // Fermer le modal sans envoyer d'email
+                const emailModal = document.getElementById('email-modal');
+                emailModal.classList.remove('show');
+                emailModal.classList.add('hidden');
+                
+                // Soumettre le formulaire sans l'option email
                 document.getElementById('score-form').submit();
             };
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\UsersImport;
 
 class UserController extends Controller
 {
@@ -42,5 +44,16 @@ public function store(Request $request)
     ]);
 
     return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
+}
+
+public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls',
+    ]);
+
+    Excel::import(new UsersImport, $request->file('file'));
+
+    return redirect()->back()->with('success', 'Utilisateurs importés avec succès.');
 }
 }

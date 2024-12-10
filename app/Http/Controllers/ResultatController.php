@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
-
 use App\Models\Result;
+use App\Mail\QuizResultMail; // N'oubliez pas d'importer le Mailable
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ResultatController extends Controller
 {
@@ -25,7 +25,11 @@ class ResultatController extends Controller
             'score' => $score,
         ]);
 
+        // Envoyer le résultat par email
+        $totalQuestions = // Récupérer le nombre total de questions (vous devez définir comment le récupérer)
+        Mail::to(Auth::user()->email)->send(new QuizResultMail($score, $totalQuestions));
+
         // Rediriger ou retourner une réponse
-        return redirect()->back()->with('success', 'Score enregistré avec succès !');
+        return redirect()->back()->with('success', 'Score enregistré avec succès et résultats envoyés par email !');
     }
 }
