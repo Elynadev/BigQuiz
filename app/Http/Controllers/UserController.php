@@ -54,6 +54,7 @@ public function import(Request $request)
 
     Excel::import(new UsersImport, $request->file('file'));
 
-    return redirect()->back()->with('success', 'Utilisateurs importés avec succès.');
+     // Redirection vers la liste des utilisateurs
+     return redirect()->route('users.index')->with('success', 'Utilisateurs importés avec succès.');
 }
 }
