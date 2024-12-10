@@ -6,20 +6,19 @@
 
     <div class="flex justify-center space-x-4 mb-4">
         <a href="{{ route('users.create') }}" class="bg-orange-500 text-white py-2 px-4 rounded-md flex items-center space-x-2">
-            
             <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 12H18M12 6V18" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+            </svg>
             Créer un Utilisateur</a>
-        
-        <a href="{{ route('users.export') }}" class="bg-green-500  text-white py-2 px-4 rounded-md flex items-center space-x-2">
+
+        <a href="{{ route('users.export') }}" class="bg-green-500 text-white py-2 px-4 rounded-md flex items-center space-x-2">
             <svg fill="#000000" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.71,7.71,11,5.41V15a1,1,0,0,0,2,0V5.41l2.29,2.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42l-4-4a1,1,0,0,0-.33-.21,1,1,0,0,0-.76,0,1,1,0,0,0-.33.21l-4,4A1,1,0,1,0,8.71,7.71ZM21,14a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V15a1,1,0,0,0-2,0v4a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V15A1,1,0,0,0,21,14Z"/>
             </svg>
             <span>Exporter des Utilisateurs</span>
         </a>
 
-        <a href="{{ route('users.import.view') }}" class="bg-blue-500  text-white py-2 px-4 rounded-md flex items-center space-x-2">
+        <a href="{{ route('users.import.view') }}" class="bg-blue-500 text-white py-2 px-4 rounded-md flex items-center space-x-2">
             <svg fill="#000000" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M21,14a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V15a1,1,0,0,0-2,0v4a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V15A1,1,0,0,0,21,14Zm-9.71,1.71a1,1,0,0,0,.33.21.94.94,0,0,0,.76,0,1,1,0,0,0,.33-.21l4-4a1,1,0,0,0-1.42-1.42L13,12.59V3a1,1,0,0,0-2,0v9.59l-2.29-2.3a1,1,0,1,0-1.42,1.42Z"/>
             </svg>
@@ -33,6 +32,16 @@
         </div>
     @endif
 
+    @if(session('import_errors'))
+    <div class="bg-red-500 text-white p-3 rounded mb-4 text-center">
+        <ul>
+            @foreach (session('import_errors') as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white border-collapse border border-gray-300 rounded-lg shadow-md">
             <thead>
@@ -45,7 +54,6 @@
                 </tr>
             </thead>
             <tbody class="text-gray-700">
-              
                 @foreach($users as $user)
                     <tr class="hover:bg-gray-50 transition duration-150 ease-in-out">
                         <td class="py-3 px-6 border-r border-b border-gray-300">{{ $user->id }}</td>
