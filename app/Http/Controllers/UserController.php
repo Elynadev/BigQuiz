@@ -34,7 +34,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed', // Assurez-vous d'avoir un champ de confirmation de mot de passe
-            'role' => 'required|string|max:255', // Si vous avez un rôle
+            'role' => 'required|string|in:user,admin', // Validation du rôle, doit être 'user' ou 'admin'
         ]);
 
         User::create([

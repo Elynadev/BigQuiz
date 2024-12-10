@@ -22,6 +22,16 @@
                 <input type="email" id="email" name="email" value="{{ $user->email }}" 
                     class="w-full border border-gray-300 rounded px-4 py-2">
             </div>
+
+            <!-- Rôle -->
+            <div class="mb-4">
+                <label for="role" class="block text-gray-700 font-bold mb-2">Rôle :</label>
+                <select name="role" id="role" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                    <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
+                </select>
+            </div>
+
             <div class="flex justify-between">
                 <a href="{{ route('users.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     Annuler
@@ -34,4 +44,3 @@
     </div>
 </body>
 </html>
-
