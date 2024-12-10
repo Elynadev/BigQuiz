@@ -6,23 +6,33 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class QuizResultMail extends Mailable
+class QuizResultsMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $score;
-    public $totalQuestions;
 
-    public function __construct($score, $totalQuestions)
+    /**
+     * Crée une nouvelle instance de Mailable.
+     *
+     * @param int $score
+     */
+    public function __construct($score)
     {
         $this->score = $score;
-        $this->totalQuestions = $totalQuestions;
     }
 
+    /**
+     * Construire le message.
+     *
+     * @return $this
+     */
     public function build()
     {
-        return $this
-            ->subject('Résultats de votre Quiz')
-            ->view('emails.quiz_result'); // Assurez-vous que cette vue existe
+        return $this->subject('Votre résultat au quiz')
+                    ->view('email.resultat')
+                    ->with([
+                        'score' => $this->score,
+                    ]);
     }
 }

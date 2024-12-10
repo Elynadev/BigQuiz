@@ -16,6 +16,7 @@
 <form id="score-form" action="{{ route('results.store') }}" method="POST" style="display: none;">
     @csrf
     <input type="hidden" name="score" id="final-score" value="">
+    <input type="hidden" name="email" id="email" value="{{ auth()->user()->email }}">
 </form>
 
 <!-- Toast Notification -->
@@ -24,14 +25,25 @@
 </div>
 
 <!-- Modal pour email -->
-<div id="email-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+<div id="email-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
     <div class="bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-lg font-bold mb-4">Recevoir les résultats par email ?</h2>
+        <h2 id="modal-title" class="text-lg font-bold mb-4">Recevoir les résultats par email ?</h2>
+          
         <p>Souhaitez-vous recevoir vos résultats de quiz à l'adresse email associée à votre compte ?</p>
         <div class="mt-4">
-            <button id="confirm-email" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Oui</button>
+           <button id="confirm-email" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" aria-label="Confirmer l'envoi de l'email">Oui</button>
+
             <button id="cancel-email" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Non</button>
         </div>
+    </div>
+</div>
+
+<!-- Modal pour le statut d'envoi d'email -->
+<div id="status-modal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h2 id="status-title" class="text-lg font-bold mb-4"></h2>
+        <p id="status-message"></p>
+        <button id="close-status-modal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4">Fermer</button>
     </div>
 </div>
 
@@ -93,6 +105,7 @@
         border: 1px solid #e2e8f0;
         border-radius: 8px;
         padding: 16px;
+
         margin: 8px; /* Espacement entre les cartes */
         flex: 1 1 calc(25% - 16px); /* 4 cartes par rangée avec un espacement */
         box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur totale */
@@ -210,10 +223,29 @@
             };
 
             // Gestion des clics sur les boutons du modal
-            document.getElementById('confirm-email').onclick = function() {
-                // Envoyer le formulaire avec l'email
-                document.getElementById('score-form').submit();
-            };
+          document.getElementById('confirm-email').onclick = function() {
+    const formData = new FormData(document.getElementById('score-form'));
+
+    fetch('{{ route("results.store") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('status-title').innerText = data.status === 'succès' ? 'Succès' : 'Erreur';
+        document.getElementById('status-message').innerText = data.message;
+
+        const statusModal = document.getElementById('status-modal');
+        statusModal.classList.remove('hidden');
+    })
+    .catch(error => {
+        console.error('Erreur dans l\'envoi des données : ', error);
+    });
+};
 
             document.getElementById('cancel-email').onclick = function() {
                 // Fermer le modal sans envoyer d'email

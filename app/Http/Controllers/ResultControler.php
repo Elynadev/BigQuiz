@@ -6,31 +6,39 @@ use Illuminate\Http\Request;
 use App\Models\Result;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\QuizResultMail;
+use App\Mail\QuizResultsMail;
+use Illuminate\Support\Facades\Validator;
 
-class ResultController extends Controller
+use Illuminate\Support\Facades\Storage;
+
+class ResultControler extends Controller
 {
     public function store(Request $request)
     {
-        // Valider la requête
+        // Valider les données d'entrée
         $request->validate([
             'score' => 'required|integer|min:0',
-            'email' => 'required|email',
         ]);
 
-        // Récupérer le score depuis la requête
+        // Vérifier si l'utilisateur est authentifié
+        if (!Auth::check()) {
+            return redirect()->back()->with('error', 'Vous devez être connecté pour enregistrer votre score.');
+        }
+
+        // Récupérer le score et l'utilisateur authentifié
         $score = $request->input('score');
+        $userId = Auth::id();
 
         // Enregistrer le score dans la base de données
         Result::create([
-            'user_id' => Auth::id(), // Assurez-vous que l'utilisateur est authentifié
+            'user_id' => $userId,
             'score' => $score,
         ]);
 
-        // Envoyer l'email avec les résultats
-        Mail::to($request->email)->send(new QuizResultMail($score));
+        // Envoyer un e-mail de confirmation
+        Mail::to(Auth::user()->email)->send(new QuizResultsMail($score));
 
-        // Rediriger ou retourner une réponse
-        return redirect()->back()->with('success', 'Score enregistré avec succès !');
+        // Rediriger avec un message de succès
+        return redirect()->back()->with('success', 'Score enregistré avec succès et e-mail envoyé !');
     }
 }
