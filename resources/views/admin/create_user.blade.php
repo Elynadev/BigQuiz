@@ -27,12 +27,17 @@
             <input type="password" name="password_confirmation" id="password_confirmation" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
         </div>
 
+        <!-- Champ pour sélectionner le rôle -->
         <div class="mb-4">
             <label for="role" class="block text-gray-700">Rôle:</label>
-            <input type="text" name="role" id="role" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+            <select name="role" id="role" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                <option value="user">Utilisateur</option>
+                <option value="admin">Administrateur</option>
+            </select>
         </div>
 
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md">Créer Utilisateur</button>
     </form>
 </div>
 @endsection
+
