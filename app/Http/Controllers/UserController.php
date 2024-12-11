@@ -79,29 +79,17 @@ public function import(Request $request)
     return redirect()->route('users.index')->with('success', 'Utilisateurs importés avec succès.');
 }
 
-public function edit($id)
-{
-    // Trouver l'utilisateur par son ID
-    $user = User::findOrFail($id);
-
 public function submitText(Request $request)
 {
     $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $id,
-        'role' => 'required|string|in:user,admin',  // Ajouter la validation pour le rôle
+        'text' => 'required|string',
+        'recipient_email' => 'required|string|email',
     ]);
 
     $user = auth()->user(); // Récupération de l'utilisateur connecté
     $submittedText = $request->input('text');
     $recipientEmail = $request->input('recipient_email'); // Récupération de l'email du destinataire
 
-    // Mettre à jour les informations de l'utilisateur, y compris le rôle
-    $user->update([
-        'name' => $request->name,
-        'email' => $request->email,
-        'role' => $request->role,  // Ajouter la mise à jour du rôle
-    ]);
 
     // Envoi de l'email
     Mail::send('emails.user_notification', [
@@ -114,5 +102,4 @@ public function submitText(Request $request)
 
     return back()->with('success', 'Commentaire soumis avec succès.');
 }
-
 }

@@ -27,7 +27,7 @@
     </div>
 
     @if(session('success'))
-        <div class="bg-green-500 text-white p-3 rounded mb-4 text-center">
+        <div class="bg-green-500 text-white p-3 rounded mb-4 text-center" id="success-message">
             {{ session('success') }}
         </div>
     @endif
@@ -82,56 +82,44 @@
 </div>
 
 <script>
-    // Notification automatique de succès
-    setTimeout(() => {
-        const notification = document.getElementById('notification');
-        if (notification) {
-            notification.style.transition = 'opacity 0.5s ease';
-            notification.style.opacity = '0';
-            setTimeout(() => notification.remove(), 500);
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Empêche la soumission du formulaire
+            const userName = this.closest('tr').querySelector('td:nth-child(2)').innerText; // Récupère le nom de l'utilisateur
+            Swal.fire({
+                title: 'Êtes-vous sûr ?',
+                text: `Vous allez supprimer l'utilisateur ${userName}. Cette action est irréversible.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer !',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.submit(); // Soumet le formulaire si l'utilisateur confirme
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fonction pour masquer les messages après 3 secondes
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000); // 3000 millisecondes = 3 secondes
         }
-    }, 5000);
 
-    // Gestion des avertissements de suppression
-    function showDeletionWarning(userId) {
-        const existingWarning = document.getElementById('deletion-warning');
-        if (existingWarning) existingWarning.remove();
-
-        // Création de la notification d'avertissement
-        const warningNotification = document.createElement('div');
-        warningNotification.id = 'deletion-warning';
-        warningNotification.innerHTML = `
-            <p class="font-bold">Attention :</p>
-            <p class="mt-1">Cette action est irréversible !</p>
-            <div class="mt-2 flex justify-end">
-                <button onclick="confirmDeletion(${userId})" class="bg-red-500 text-white px-4 py-2 rounded shadow-lg mr-2">Confirmer</button>
-                <button onclick="cancelDeletion()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded shadow-lg">Annuler</button>
-            </div>
-        `;
-        warningNotification.className = 'bg-yellow-500 text-black px-6 py-4 rounded shadow-lg fixed top-4 right-4 z-50';
-
-        // Ajout de la notification au DOM
-        document.body.appendChild(warningNotification);
-
-        // Supprime la notification automatiquement après 5 secondes
-        setTimeout(() => {
-            if (document.body.contains(warningNotification)) {
-                warningNotification.style.transition = 'opacity 0.5s ease';
-                warningNotification.style.opacity = '0';
-                setTimeout(() => warningNotification.remove(), 500);
-            }
-        }, 5000);
-    }
-
-    function confirmDeletion(userId) {
-        const form = document.getElementById(`deleteForm-${userId}`);
-        if (form) form.submit();
-    }
-
-    function cancelDeletion() {
-        const warningNotification = document.getElementById('deletion-warning');
-        if (warningNotification) warningNotification.remove();
-    }
+        if (errorMessage) {
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000); // 3000 millisecondes = 3 secondes
+        }
+    });
 </script>
 
 <style>
