@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\QuizResultEmail;
 use Illuminate\Http\Request;
 use App\Models\Result;
+use App\Models\Question;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\QuizResultsMail;
@@ -13,32 +15,55 @@ use Illuminate\Support\Facades\Storage;
 
 class ResultControler extends Controller
 {
+    //
+    // public function index()
+    // {
+    //     // Récupérer tous les résultats
+    //     $results = Result::with('user')->orderBy('created_at', 'desc')->get();
+
+    //     // Récupérer le nombre total de questions
+    //     $totalQuestions = Question::count(); // Compte le nombre total de questions
+
+    //     // Passer les résultats et le nombre total de questions à la vue
+    //     return view('results.index', compact('results', 'totalQuestions'));
+    // }public function store(Request $request)
     public function store(Request $request)
     {
-        // Valider les données d'entrée
+        // Récupérer le score depuis la requête
+        $score = $request->input('score');
+    
+        // Valider le score
         $request->validate([
             'score' => 'required|integer|min:0',
+            'recipient_email' => 'required|email', // Validation pour l'email
+            'text' => 'required|string', // Validation pour le texte soumis
         ]);
-
-        // Vérifier si l'utilisateur est authentifié
-        if (!Auth::check()) {
-            return redirect()->back()->with('error', 'Vous devez être connecté pour enregistrer votre score.');
-        }
-
-        // Récupérer le score et l'utilisateur authentifié
-        $score = $request->input('score');
-        $userId = Auth::id();
-
+    
         // Enregistrer le score dans la base de données
-        Result::create([
-            'user_id' => $userId,
+        $result = Result::create([
+            'user_id' => Auth::id(), // Assurez-vous que l'utilisateur est authentifié
             'score' => $score,
         ]);
-
-        // Envoyer un e-mail de confirmation
-        Mail::to(Auth::user()->email)->send(new QuizResultsMail($score));
-
-        // Rediriger avec un message de succès
-        return redirect()->back()->with('success', 'Score enregistré avec succès et e-mail envoyé !');
+    
+        // Récupérer les questions pour l'utilisateur
+        $questions = Question::where('is_active', true)->get();
+    
+        // Récupérer l'email du destinataire et le texte soumis
+        $recipientEmail = $request->input('recipient_email');
+        $submittedText = $request->input('text');
+    
+        // Envoyer l'email
+        \Mail::to($recipientEmail)->send(new QuizResultEmail($result, $questions, $submittedText));
+    
+        // Rediriger ou retourner une réponse
+        return redirect()->back()->with('success', 'Score enregistré avec succès !');
     }
+
+//     public function showResults()public function showAnswer()
+// public function showResults()
+// {
+//     $results = Result::with('user')->get(); // Exemple de récupération des résultats
+//     return view('quiz.result', compact('results')); // Assurez-vous que le chemin est correct
+// }
+
 }

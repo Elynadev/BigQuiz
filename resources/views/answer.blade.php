@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-gradient-to-r from-green-400 to-blue-800 font-roboto min-h-screen flex items-center justify-center">
-        <div class="container mx-auto p-4 max-w-lg">
+        <div class="container mx-auto p-4 max-w-screen-lg"> <!-- Augmente la largeur maximale -->
             <div class="bg-white shadow-lg rounded-lg p-6">
                 <h1 class="text-4xl font-bold mb-6 text-center text-gray-800">Jeu de Quiz</h1>
                 <div id="quiz-container" class="fade-in transition-opacity duration-500">
@@ -82,9 +82,11 @@
         }
 
         .result-grid {
-            display: flex;
-            flex-wrap: wrap; /* Permet aux cartes de passer à la ligne suivante */
-            justify-content: space-between; /* Espace entre les cartes */
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            /* Quatre colonnes */
+            gap: 16px;
+            /* Espacement entre les cartes */
         }
     </style>
 
@@ -100,22 +102,23 @@
                 const questionContainer = document.getElementById('question-container');
                 const questionData = questions[currentQuestionIndex];
                 const answers = JSON.parse(questionData.reponses || '[]');
-                const filteredAnswers = answers.filter(answer => answer.response !== null && answer.response.trim() !== '');
+                const filteredAnswers = answers.filter(answer => answer.response !== null && answer.response
+                .trim() !== '');
 
                 questionContainer.innerHTML = `
                 <h2 class="question-text fade-in">${questionData.question_text}</h2>
                 <img src="${questionData.image}" alt="Image liée à la question" class="mb-4 w-full h-48 object-cover rounded-lg fade-in shadow-md">
                 <ul class="list-none p-0">
                     ${filteredAnswers.map(answer => `
-                        <li class="mb-2 fade-in">
-                            <button 
-                                class="answer-button" 
-                                data-index="${answer.is_correct ? 'correct' : 'wrong'}" 
-                                data-correct="${answers.find(a => a.is_correct).response}">
-                                ${answer.response}
-                            </button>
-                        </li>
-                    `).join('')}
+                                                <li class="mb-2 fade-in">
+                                                    <button 
+                                                        class="answer-button" 
+                                                        data-index="${answer.is_correct ? 'correct' : 'wrong'}" 
+                                                        data-correct="${answers.find(a => a.is_correct).response}">
+                                                        ${answer.response}
+                                                    </button>
+                                                </li>
+                                            `).join('')}
                 </ul>
             `;
             }
@@ -139,12 +142,50 @@
                 }).join('');
 
                 resultsContainer.innerHTML = `
-                 <h2 class="text-lg font-semibold mb-2 fade-in">Quiz Terminé !</h2>
-                <p class="text-lg font-semibold mb-4 fade-in">Votre Score : ${correctAnswers} / ${questions.length}</p>
+                <h2 class="text-lg text-center font-semibold mb-2 fade-in">Quiz Terminé !</h2>
+                <p class="text-lg font-semibold text-center mb-4 fade-in">Votre Score : ${correctAnswers} / ${questions.length}</p>
                 <div class="result-grid">${resultCards}</div>
-                <button class="bg-green-500 text-white p-3 rounded hover:bg-green-600 transition duration-300 ease-in-out" id="submit-score-button">Soumettre le Score</button>
-                <button class="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300 ease-in-out" id="restart-button">Recommencer</button>
-                `;
+                <div class="flex justify-center space-x-4">
+    <button class="bg-green-500 text-white p-3 rounded hover:bg-green-600 transition duration-300 ease-in-out" id="submit-score-button">Soumettre le resultat</button>
+    <button class="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300 ease-in-out" id="restart-button">Recommencer</button>
+</div>
+
+<!-- Afficher le formulaire de soumission de texte ici -->
+<div class="mt-8 p-6 bg-white rounded-lg shadow-md">
+    <h3 class="text-xl font-semibold mb-4 text-gray-800">Laissez un commentaire :</h3>
+    <form action="{{ route('results.store') }}" method="POST" class="space-y-4">
+        @csrf
+        <input type="hidden" name="score" id="final-score" value=""> <!-- Assurez-vous que le score est défini ici -->
+
+        <textarea 
+            name="text" 
+            required 
+            placeholder="Votre message ici..." 
+            class="w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        ></textarea>
+
+        <label for="recipient_email" class="block text-gray-700">Choisissez un destinataire :</label>
+        <select 
+            name="recipient_email" 
+            id="recipient_email" 
+            required 
+            class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+            <option value="">Sélectionnez un utilisateur</option>
+            @foreach ($users as $user)
+                <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
+            @endforeach
+        </select>
+
+        <button 
+            type="submit" 
+            class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition duration-200"
+        >
+            Soumettre le texte
+        </button>
+    </form>
+</div>
+            `;
 
                 document.getElementById('final-score').value = correctAnswers;
 
