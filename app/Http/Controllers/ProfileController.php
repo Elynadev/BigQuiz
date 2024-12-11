@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ResultsExport;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Question;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,10 +71,12 @@ class ProfileController extends Controller
         // Calculer le meilleur score
         $bestScore = $results->max('score'); // Meilleur score
     
-        // Passer l'utilisateur, les résultats et le meilleur score à la vue
-        return view('profile.profil', compact('user', 'results', 'bestScore'));
+        // Récupérer le nombre total de questions actives
+        $totalQuestions = Question::where('is_active', true)->count(); // Compte uniquement les questions actives
+    
+        // Passer l'utilisateur, les résultats, le meilleur score et le nombre total de questions à la vue
+        return view('profile.profil', compact('user', 'results', 'bestScore', 'totalQuestions'));
     }
-
     public function exportResults()
 {
     $user = Auth::user();

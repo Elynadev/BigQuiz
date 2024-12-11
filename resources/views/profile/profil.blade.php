@@ -30,7 +30,7 @@
                 @foreach($results as $result)
                     <tr class="hover:bg-gray-100 transition duration-150 ease-in-out">
                         <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $user->name }}</td>
-                        <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->score }}</td>
+                        <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->score }} / {{ $totalQuestions }}</td> <!-- Affiche le score et le nombre total de questions -->
                         <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->created_at->format('d/m/Y') }}</td>
                     </tr>
                 @endforeach

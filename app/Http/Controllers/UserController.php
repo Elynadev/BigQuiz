@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
+use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -80,6 +82,7 @@ public function import(Request $request)
 
 public function submitText(Request $request)
 {
+    // Validation des données
     $request->validate([
         'text' => 'required|string',
         'recipient_email' => 'required|string|email',
@@ -89,16 +92,22 @@ public function submitText(Request $request)
     $submittedText = $request->input('text');
     $recipientEmail = $request->input('recipient_email'); // Récupération de l'email du destinataire
 
+    // Récupération des résultats du quiz
+    $result = Result::where('user_id', $user->id)->latest()->first(); // Adaptez cette logique selon vos besoins
+    $questions = Question::where('is_active', true)->get(); // Récupérer les questions
 
     // Envoi de l'email
-    Mail::send('emails.user_notification', [
-        'user' => $user,
-        'submittedText' => $submittedText,
-    ], function ($message) use ($recipientEmail, $user) {
-        $message->to($recipientEmail)
-                ->subject('Nouveau commentaire de ' . $user->name);
-    });
-
-    return back()->with('success', 'Commentaire soumis avec succès.');
-}
+try {
+        Mail::send('emails.user_notification', [
+            'user' => $user,
+            'submittedText' => $submittedText,
+            'result' => $result,
+            'questions' => $questions,
+        ], function ($message) use ($recipientEmail, $user) {
+            $message->to($recipientEmail)
+                    ->subject('Nouveau commentaire de ' . $user->name);
+        });
+    } catch (\Exception $e) {
+        return back()->with('error', 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage());
+    }
 }
