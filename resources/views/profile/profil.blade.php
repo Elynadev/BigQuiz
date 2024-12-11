@@ -28,7 +28,7 @@
             </thead>
             <tbody class="text-gray-700" id="table-body">
                 @foreach($results as $index => $result)
-                    <tr class="hover:bg-gray-100 transition duration-150 ease-in-out {{ $index >= 20 ? 'hidden' : '' }}">
+                    <tr class="hover:bg-gray-100 transition duration-150 ease-in-out {{ $index >= 6 ? 'hidden' : '' }}">
                         <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $user->name }}</td>
                         <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->score }} / {{ $totalQuestions }}</td>
                         <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->created_at->format('d/m/Y') }}</td>
@@ -72,14 +72,18 @@
 <script>
     document.getElementById('show-more').addEventListener('click', function() {
         const rows = document.querySelectorAll('#table-body tr.hidden');
-        
-        // Afficher toutes les lignes cachées
-        rows.forEach(row => {
-            row.classList.remove('hidden');
-        });
+        const rowsToShow = Math.min(rows.length, 10); // Afficher 10 lignes supplémentaires
 
-        // Cacher le bouton après avoir affiché toutes les lignes
-        this.parentElement.classList.add('hidden');
+        for (let i = 0; i < rowsToShow; i++) {
+            if (rows[i]) {
+                rows[i].classList.remove('hidden');
+            }
+        }
+
+        // Cacher le bouton si toutes les lignes sont affichées
+        if (rows.length <= rowsToShow) {
+            this.parentElement.classList.add('hidden');
+        }
     });
 </script>
 @endsection
