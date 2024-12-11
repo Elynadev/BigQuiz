@@ -80,7 +80,6 @@ public function import(Request $request)
 
     return redirect()->route('users.index')->with('success', 'Utilisateurs importés avec succès.');
 }
-
 public function submitText(Request $request)
 {
     // Validation des données
@@ -93,24 +92,39 @@ public function submitText(Request $request)
     $submittedText = $request->input('text');
     $recipientEmail = $request->input('recipient_email'); // Récupération de l'email du destinataire
 
-    // Récupération des résultats du quiz
-    $result = Result::where('user_id', $user->id)->latest()->first(); // Adaptez cette logique selon vos besoins
+    // Récupération des questions actives
     $questions = Question::where('is_active', true)->get(); // Récupérer les questions
 
-    // Envoi de l'email
-
-try {
-  
-    Mail::send('emails.user_notification', [
-        'user' => $user,
-        'submittedText' => $submittedText,
-    ], function ($message) use ($recipientEmail, $user) {
-        $message->to($recipientEmail)
-                ->subject('Nouveau commentaire de ' . $user->name);
+    // Préparer les bonnes réponses
+    $questionsWithCorrectAnswers = $questions->map(function ($question) {
+        $answers = json_decode($question->reponses, true);
+        $correctAnswer = collect($answers)->firstWhere('is_correct', true);
+        return [
+            'question_text' => $question->question_text,
+            'correct_answer' => $correctAnswer ? $correctAnswer['response'] : 'Aucune réponse correcte',
+        ];
     });
 
-    return back()->with('success', 'Commentaire soumis avec succès.');
+    // Envoi de l'email
+    try {
+         dd($questions);
+        Mail::send('emails.user_notification', [
+            'user' => $user,
+            'submittedText' => $submittedText,
+            'questions' => $questionsWithCorrectAnswers,
+        ], function ($message) use ($recipientEmail, $user) {
+            $message->to($recipientEmail)
+                    ->subject('Nouveau commentaire de ' . $user->name);
+        });
+
+
+
+        return back()->with('success', 'Commentaire soumis avec succès.');
+    } catch (\Exception $e) {
+        return back()->with('error', 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage());
+    }
 }
+
 public function edit($id)
 {
     // Récupère l'utilisateur à partir de l'ID

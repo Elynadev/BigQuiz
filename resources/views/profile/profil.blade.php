@@ -26,11 +26,11 @@
                     <th class="py-3 px-6 border-r border-gray-300 text-left">Date</th>
                 </tr>
             </thead>
-            <tbody class="text-gray-700">
-                @foreach($results as $result)
-                    <tr class="hover:bg-gray-100 transition duration-150 ease-in-out">
+            <tbody class="text-gray-700" id="table-body">
+                @foreach($results as $index => $result)
+                    <tr class="hover:bg-gray-100 transition duration-150 ease-in-out {{ $index >= 20 ? 'hidden' : '' }}">
                         <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $user->name }}</td>
-                        <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->score }} / {{ $totalQuestions }}</td> <!-- Affiche le score et le nombre total de questions -->
+                        <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->score }} / {{ $totalQuestions }}</td>
                         <td class="py-3 px-6 border-r border-gray-300 text-center">{{ $result->created_at->format('d/m/Y') }}</td>
                     </tr>
                 @endforeach
@@ -42,6 +42,12 @@
                 @endif
             </tbody>
         </table>
+
+        <div id="more-rows" class="text-center mt-4 {{ count($results) <= 20 ? 'hidden' : '' }}">
+            <button id="show-more" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Voir plus
+            </button>
+        </div>
     </div>
 
     <div class="text-center">
@@ -61,4 +67,20 @@
         <h2 class="text-lg font-semibold mt-6 text-gray-800">Meilleur Score: <span class="font-medium text-green-600">{{ $bestScore }}</span></h2>
     @endif
 </div>
+
+@section('scripts')
+<script>
+    document.getElementById('show-more').addEventListener('click', function() {
+        const rows = document.querySelectorAll('#table-body tr.hidden');
+        
+        // Afficher toutes les lignes cachées
+        rows.forEach(row => {
+            row.classList.remove('hidden');
+        });
+
+        // Cacher le bouton après avoir affiché toutes les lignes
+        this.parentElement.classList.add('hidden');
+    });
+</script>
+@endsection
 @endsection

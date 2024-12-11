@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Result;
 use App\Models\Question;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\QuizResultsMail;
-use Illuminate\Support\Facades\Validator;
-
-use Illuminate\Support\Facades\Storage;
 
 class ResultControler extends Controller
 {
@@ -53,7 +48,7 @@ class ResultControler extends Controller
         $submittedText = $request->input('text');
     
         // Envoyer l'email
-        Mail::to($recipientEmail)->send(new QuizResultEmail($result, $questions, $submittedText));
+        \Mail::to($recipientEmail)->send(new QuizResultEmail($result, $questions, $submittedText));
     
         // Rediriger ou retourner une réponse
         return redirect()->back()->with('success', 'Score enregistré avec succès !');
