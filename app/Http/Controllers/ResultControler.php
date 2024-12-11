@@ -53,7 +53,7 @@ class ResultControler extends Controller
         $submittedText = $request->input('text');
     
         // Envoyer l'email
-        \Mail::to($recipientEmail)->send(new QuizResultEmail($result, $questions, $submittedText));
+        Mail::to($recipientEmail)->send(new QuizResultEmail($result, $questions, $submittedText));
     
         // Rediriger ou retourner une réponse
         return redirect()->back()->with('success', 'Score enregistré avec succès !');
