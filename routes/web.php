@@ -12,6 +12,7 @@ use App\Http\Controllers\ResultController;
 use App\Http\Controllers\RoleController;
 use App\Exports\UsersExport; // Ajout de l'export
 use Maatwebsite\Excel\Facades\Excel; // Ajout de la facade Excel
+use Illuminate\Support\Facades\Mail;
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/roles/create', [RoleController::class, 'createRoles']);
@@ -24,6 +25,8 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/', function () {
     return view('welcome');
 });
+
+
 
 // Dashboard
 Route::get('/dashboard', function () {
