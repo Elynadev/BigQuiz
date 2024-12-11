@@ -3,20 +3,20 @@
 <div class="relative h-screen bg-cover bg-center" style="background-image: url('images/hopscotch-concept-illustration_114360-8387.jpg');">
     <div class="absolute inset-0 opacity-10"></div> <!-- Overlay for better text visibility -->
     
-    <div class="flex flex-col items-center justify-center h-full">
+    <div class="flex flex-col items-center justify-center h-full px-4 sm:px-6 lg:px-8">
         <!-- Animated Letters -->
-        <div id="animated-letters" class="text-center text-6xl font-extrabold mb-8" style="color: #fffff;"></div>
+        <div id="animated-letters" class="text-center text-4xl sm:text-6xl font-extrabold mb-8 text-black"></div>
 
-        <div class="bg-white bg-opacity-90 w-full max-w-md mx-auto shadow-lg rounded-lg transition transform hover:scale-105 duration-300 ease-in-out p-6 mb-8 yoyo">
-            <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-4" style="color: #2df20a;">Commençons le test !</h1>
-            <p class="text-center text-slate-800 font-bold mb-2"  style="color: #374158;">Bienvenue sur votre site de test</p>
-            <p class="text-center text-slate-800 font-bold mb-2"  style="color: #374158;">Ici, vous pouvez mettre à l'épreuve votre savoir sur une variété de sujets captivants</p>
-            <p class="text-center text-slate-800 font-bold mb-6"  style="color: #374158;">Défiez-vous avec des test interactifs et amusez-vous tout en apprenant !</p>
+        <div class="bg-white bg-opacity-90 w-full max-w-md mx-auto shadow-lg rounded-lg transition transform hover:scale-105 duration-300 ease-in-out p-6 mb-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-green-500 mb-4">Commençons le test !</h1>
+            <p class="text-center text-slate-800 font-bold mb-2">Bienvenue sur votre site de test</p>
+            <p class="text-center text-slate-800 font-bold mb-2">Ici, vous pouvez mettre à l'épreuve votre savoir sur une variété de sujets captivants</p>
+            <p class="text-center text-slate-800 font-bold mb-6">Défiez-vous avec des tests interactifs et amusez-vous tout en apprenant !</p>
         </div>
 
         <a href="/answer" id="start-button"
            class="mt-4 inline-block w-full max-w-xs bg-blue-600 text-white px-6 py-3 text-center rounded-lg 
-                 text-3xl shadow-md font-bold transition duration-300 ease-in-out transform hover:bg-green-600 hover:shadow-lg hover:scale-105 ">
+                 text-xl sm:text-3xl shadow-md font-bold transition duration-300 ease-in-out transform hover:bg-green-600 hover:shadow-lg hover:scale-105">
                   Commencer le jeu
         </a>
     </div>
@@ -42,7 +42,7 @@
     anime({
         targets: '#animated-letters span',
         translateY: [-50, 0],
-        opacity: [1, 0,5 , 0],
+        opacity: [1, 0.5, 0],
         duration: 500,
         easing: 'easeOutExpo',
         delay: anime.stagger(100) // delay between each letter

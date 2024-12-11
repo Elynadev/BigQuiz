@@ -48,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     
 
+    //Route pour soumission de text pour l'envoi de l'email
+    Route::post('/submit-text', [UserController::class, 'submitText'])->name('submit.text');
+    
+    
     // Route pour exporter les utilisateurs
     Route::get('/users/export', function () {
         return Excel::download(new UsersExport, 'utilisateurs.xlsx');

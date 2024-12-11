@@ -34,20 +34,30 @@
     <div class="min-h-screen">
        <!-- Navigation -->
        <nav class="bg-blue-600 border-b border-blue-700 shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <h1 class="multicolor-text text-4xl font-bold">BigGame</h1>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex-shrink-0">
+                <h1 class="multicolor-text text-4xl font-bold">BigGame</h1>
+            </div>
+            <div class="flex items-center">
+                <!-- Menu hamburger for small screens -->
+                <div class="sm:hidden">
+                    <button id="menu-button" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
                 </div>
+                <!-- Desktop menu (hidden on mobile) -->
                 <div class="hidden sm:block">
                     <div class="flex space-x-4">
                         <a href="{{ route('dashboard') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Dashboard</a>
-    
-                        @if(auth()->user()->role === 'admin') <!-- Vérification du rôle -->
+
+                        @if(auth()->user()->role === 'admin')
                             <a href="{{ route('admin.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Questions</a>
-                            <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Utilisateurs</a> <!-- Lien vers la gestion des utilisateurs -->
+                            <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Utilisateurs</a>
                         @endif
-    
+
                         <a href="{{ route('admin.results') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Résultats</a>
                         <a href="{{ route('profile.profil') }}" class="text-white hover:bg-blue-500 px-3 py-2 rounded-md text-xl font-bold">Profil</a>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -58,13 +68,35 @@
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
 
+    <!-- Mobile menu (hidden on desktop) -->
+    <div id="mobile-menu" class="sm:hidden hidden bg-blue-600">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="{{ route('dashboard') }}" class="text-white hover:bg-blue-500 block px-3 py-2 rounded-md text-xl font-bold">Dashboard</a>
 
+            @if(auth()->user()->role === 'admin')
+                <a href="{{ route('admin.index') }}" class="text-white hover:bg-blue-500 block px-3 py-2 rounded-md text-xl font-bold">Questions</a>
+                <a href="{{ route('users.index') }}" class="text-white hover:bg-blue-500 block px-3 py-2 rounded-md text-xl font-bold">Utilisateurs</a>
+            @endif
 
+            <a href="{{ route('admin.results') }}" class="text-white hover:bg-blue-500 block px-3 py-2 rounded-md text-xl font-bold">Résultats</a>
+            <a href="{{ route('profile.profil') }}" class="text-white hover:bg-blue-500 block px-3 py-2 rounded-md text-xl font-bold">Profil</a>
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button type="submit" class="text-white hover:bg-red-500 px-3 py-2 rounded-md text-xl bg-green-600 font-medium">Déconnexion</button>
+            </form>
+        </div>
+    </div>
+</nav>
 
-
-
+<!-- Toggle mobile menu with JS -->
+<script>
+    document.getElementById('menu-button').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu.classList.toggle('hidden'); // Toggle the visibility of the mobile menu
+    });
+</script>
         <!-- Page Heading -->
         @isset($header)
             <header class="bg-white shadow">

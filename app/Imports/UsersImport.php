@@ -14,28 +14,34 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
 {
     use SkipsFailures;
 
-    // Pour stocker les noms des utilisateurs
     protected $userNames = [];
 
     public function model(array $row)
-    {
-        // Ajoutez le nom de l'utilisateur à la liste pour l'utiliser plus tard
-        $this->userNames[] = $row['nom'];
+{
+    logger('Traitement de la ligne : ' . json_encode($row));
 
-        // Vérifiez si l'utilisateur existe déjà par son email
-        if (User::where('email', $row['email'])->exists()) {
-            // Lancer une exception avec le nom de l'utilisateur
-            throw new \Exception("L'utilisateur avec l'email {$row['email']} existe déjà. Nom: {$row['nom']}");
-        }
-
-        // Créez un nouvel utilisateur s'il n'existe pas
-        return new User([
-            'name' => $row['nom'],
-            'email' => $row['email'],
-            'password' => bcrypt('password'),
-            'role' => $this->getRole($row['role']),
-        ]);
+    if (empty($row['nom'])) {
+        throw new \Exception("Le nom de l'utilisateur est manquant.");
     }
+
+    // Assurez-vous de stocker les informations nécessaires ici
+    $this->userNames[] = [
+        'name' => $row['nom'],
+        'email' => $row['email'],
+        'id' => User::where('email', $row['email'])->value('id'), // Récupérez l'ID de l'utilisateur si existant
+    ];
+
+    if (User::where('email', $row['email'])->exists()) {
+        throw new \Exception("L'utilisateur avec l'email {$row['email']} existe déjà. Nom: {$row['nom']}");
+    }
+
+    return new User([
+        'name' => $row['nom'],
+        'email' => $row['email'],
+        'password' => bcrypt('password'),
+        'role' => $this->getRole($row['role']),
+    ]);
+}
 
     public function rules(): array
     {
@@ -54,19 +60,17 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFai
 
     public function onFailure(Failure ...$failures)
     {
-        $errorMessages = []; // Créer un tableau pour stocker les messages d'erreur
+        $errorMessages = [];
 
         foreach ($failures as $failure) {
-            $row = $failure->row(); // Numéro de la ligne échouée
+            $row = $failure->row();
+            $userName = $this->userNames[$row - 1] ?? '';
+            $email = $failure->values()['email'] ?? '';
+            $userId = User::where('email', $email)->value('id');
 
-            // Récupérer le nom de l'utilisateur correspondant à la ligne échouée
-            $userName = $this->userNames[$row - 1] ?? 'Inconnu'; // Utilisez -1 pour le décalage de l'index
-
-            // Ajouter le message d'erreur avec le nom de l'utilisateur
-            $errorMessages[] = "Erreur pour l'utilisateur {$userName} à la ligne {$row}: " . implode(', ', $failure->errors());
+            $errorMessages[] = "Erreur pour l'utilisateur {$userName},dont Email est : {$email}, ID: {$userId} à la ligne {$row}: " . implode(', ', $failure->errors());
         }
 
-        // Enregistrer le tableau d'erreurs dans la session
         session()->flash('import_errors', $errorMessages);
     }
 }
