@@ -6,22 +6,23 @@
     <a href="{{ route('admin.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Ajouter une Question</a>
 
     @if(session('success'))
-        <div class="bg-green-200 border border-green-600 text-green-600 p-3 rounded mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div id="notification" class="bg-green-200 border border-green-600 text-green-600 p-3 rounded mb-4">
+        {{ session('success') }}
+    </div>
+@endif
 
     @if($questions->isEmpty())
         <div class="bg-yellow-200 border border-yellow-600 text-yellow-600 p-3 rounded mb-4">
             Aucune question active trouvée.
         </div>
     @else
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
             @foreach($questions as $question)
                 <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-md">
                     <h2 class="text-lg font-bold mb-2">Question : {{ $question->question_text }}</h2>
                     @if($question->image)
-                        <img src="{{ asset($question->image) }}" alt="Image de la question" class="w-full h-32 object-cover rounded mb-2">
+                        <img src="{{ asset($question->image) }}" alt="Image de la question"
+                         class="w-full h-64 object-cover rounded mb-2">
                     @endif
                     <p class="text-orange-700 text-center bg-lime-300 text-xl mb-2 font-extrabold"> Question : {{ $question->is_active ? 'Actif' : 'Inactif' }}</p>
 
@@ -101,5 +102,15 @@
             }
         });
     }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Cible la notification
+        const notification = document.getElementById('notification');
+        if (notification) {
+            // Masque la notification après 3 secondes
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000); // Durée en millisecondes
+        }
+    });
 </script>
 @endsection
