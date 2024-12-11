@@ -54,9 +54,9 @@
                 </tr>
             </thead>
             <tbody class="text-gray-700">
-                @foreach($users as $user)
-                    <tr class="hover:bg-gray-50 transition duration-150 ease-in-out">
-                        <td class="py-3 px-6 border-r border-b border-gray-300">{{ $user->id }}</td>
+            @foreach($users as $index => $user)
+                                <tr class="hover:bg-gray-50 transition duration-150 ease-in-out">
+                        <td class="py-3 px-6 border-r border-b border-gray-300">{{  $index+1 }}</td>
                         <td class="py-3 px-6 border-r border-b border-gray-300">{{ $user->name }}</td>
                         <td class="py-3 px-6 border-r border-b border-gray-300">{{ $user->email }}</td>
                         <td class="py-3 px-6 border-r border-b border-gray-300">{{ $user->role }}</td>

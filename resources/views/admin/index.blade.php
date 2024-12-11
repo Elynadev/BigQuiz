@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-6">Liste des Questions Actives</h1>
+    <h1 class="text-2xl font-bold mb-6">Liste des Questions</h1>
     <a href="{{ route('admin.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Ajouter une Question</a>
 
     @if(session('success'))
