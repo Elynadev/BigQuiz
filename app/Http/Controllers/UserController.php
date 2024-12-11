@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UsersImport;
 use Maatwebsite\Excel\Validators\ValidationException;
@@ -25,9 +26,10 @@ class UserController extends Controller
 
 
     public function create()
-    {
-        return view('admin.create_user'); // Assurez-vous de créer cette vue
-    }
+{
+    $users = User::all(); 
+    return view('admin.create_user', compact('users')); // Assurez-vous de créer cette vue
+}
 
     public function store(Request $request)
     {
@@ -76,36 +78,28 @@ public function import(Request $request)
 
     return redirect()->route('users.index')->with('success', 'Utilisateurs importés avec succès.');
 }
-// Dans le contrôleur UserController
-public function edit($id)
-{
-    // Trouver l'utilisateur par son ID
-    $user = User::findOrFail($id);
 
-    // Retourner la vue avec l'utilisateur
-    return view('users.edit', compact('user'));
-}
-
-public function update(Request $request, $id)
+public function submitText(Request $request)
 {
-    // Valider les données envoyées dans le formulaire
     $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $id,
-        // Ajoutez d'autres règles de validation selon vos besoins
+        'text' => 'required|string',
+        'recipient_email' => 'required|string|email',
     ]);
 
-    // Trouver l'utilisateur par son ID
-    $user = User::findOrFail($id);
+    $user = auth()->user(); // Récupération de l'utilisateur connecté
+    $submittedText = $request->input('text');
+    $recipientEmail = $request->input('recipient_email'); // Récupération de l'email du destinataire
 
-    // Mettre à jour les informations de l'utilisateur
-    $user->update([
-        'name' => $request->name,
-        'email' => $request->email,
-        // Mettez à jour d'autres champs si nécessaire
-    ]);
 
-    // Rediriger avec un message de succès
-    return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+    // Envoi de l'email
+    Mail::send('emails.user_notification', [
+        'user' => $user,
+        'submittedText' => $submittedText,
+    ], function ($message) use ($recipientEmail, $user) {
+        $message->to($recipientEmail)
+                ->subject('Nouveau commentaire de ' . $user->name);
+    });
+
+    return back()->with('success', 'Commentaire soumis avec succès.');
 }
 }
