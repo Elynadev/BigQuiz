@@ -120,6 +120,26 @@
             }, 3000); // 3000 millisecondes = 3 secondes
         }
     });
+    function showDeletionWarning(userId) {
+        // Affiche une boîte de confirmation avant la suppression
+        const userName = document.getElementById(`deleteForm-${userId}`).closest('tr').querySelector('td:nth-child(2)').innerText;
+        Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: `Vous allez supprimer l'utilisateur ${userName}. Cette action est irréversible.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Oui, supprimer !',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Soumettre le formulaire après confirmation
+                document.getElementById(`deleteForm-${userId}`).submit();
+            }
+        });
+    }
+    
 </script>
 
 <style>

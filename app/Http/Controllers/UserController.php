@@ -98,17 +98,43 @@ public function submitText(Request $request)
     $questions = Question::where('is_active', true)->get(); // Récupérer les questions
 
     // Envoi de l'email
+
 try {
-        Mail::send('emails.user_notification', [
-            'user' => $user,
-            'submittedText' => $submittedText,
-            'result' => $result,
-            'questions' => $questions,
-        ], function ($message) use ($recipientEmail, $user) {
-            $message->to($recipientEmail)
-                    ->subject('Nouveau commentaire de ' . $user->name);
-        });
-    } catch (\Exception $e) {
-        return back()->with('error', 'Erreur lors de l\'envoi de l\'email : ' . $e->getMessage());
-    }
+  
+    Mail::send('emails.user_notification', [
+        'user' => $user,
+        'submittedText' => $submittedText,
+    ], function ($message) use ($recipientEmail, $user) {
+        $message->to($recipientEmail)
+                ->subject('Nouveau commentaire de ' . $user->name);
+    });
+
+    return back()->with('success', 'Commentaire soumis avec succès.');
+}
+public function edit($id)
+{
+    // Récupère l'utilisateur à partir de l'ID
+    $user = User::findOrFail($id);
+
+    // Retourne la vue d'édition avec les données de l'utilisateur
+    return view('users.edit', compact('user'));
+}
+public function update(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    // Valider les données
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        'role' => 'required|in:admin,user',
+    ]);
+
+    // Mettre à jour les informations de l'utilisateur
+    $user->update($request->all());
+
+    // Rediriger avec un message de succès
+    return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+}
+
 }
