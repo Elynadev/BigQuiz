@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="bg-gradient-to-r from-green-400 to-blue-800 font-roboto min-h-screen flex items-center justify-center">
-        <div class="container mx-auto p-4 max-w-lg">
+        <div class="container mx-auto p-4 w-[700px]"> <!-- Augmente la largeur maximale -->
             <div class="bg-white shadow-lg rounded-lg p-6">
-                <h1 class="text-4xl font-bold mb-6 text-center text-gray-800">Jeu de Quiz</h1>
-                <div id="quiz-container" class="fade-in transition-opacity duration-500">
+                <h1 class="text-4xl font-bold   first-line:mb-6 text-center text-gray-800">Jeu de Quiz</h1>
+                <div id="quiz-container" class="fade-in transition-opacity duration-500 ">
                     <div id="question-container"></div>
                 </div>
             </div>
@@ -17,9 +17,6 @@
         @csrf
         <input type="hidden" name="score" id="final-score" value="">
     </form>
-
-    <!-- Formulaire pour soumettre un texte -->
-
 
     <!-- Inclus les fichiers CSS nécessaires -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -84,6 +81,7 @@
             border-radius: 8px;
             padding: 16px;
             margin: 8px;
+          width:200px;
             /* Espacement entre les cartes */
             flex: 1 1 calc(25% - 16px);
             /* 4 cartes par rangée avec un espacement */
@@ -92,13 +90,16 @@
         }
 
         .result-grid {
-            display: flex;
-            flex-wrap: wrap;
-            /* Permet aux cartes de passer à la ligne suivante */
-            justify-content: space-between;
-            /* Espace entre les cartes */
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* Quatre colonnes */
+            gap: 12px;
+            /* Espacement entre les cartes */
+            width:400px;
+            margin-left: 100px;
         }
     </style>
+
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -112,22 +113,24 @@
                 const questionData = questions[currentQuestionIndex];
                 const answers = JSON.parse(questionData.reponses || '[]');
                 const filteredAnswers = answers.filter(answer => answer.response !== null && answer.response
-                    .trim() !== '');
+                .trim() !== '');
 
                 questionContainer.innerHTML = `
-                <h2 class="question-text fade-in">${questionData.question_text}</h2>
-                <img src="${questionData.image}" alt="Image liée à la question" class="mb-4 w-full h-48 object-cover rounded-lg fade-in shadow-md">
+                <h2 class="question-text fade-in ">${questionData.question_text}</h2>
+                <img src="${questionData.image}"
+                 alt="Image liée à la question" 
+                 class="mb-4 h-64  ml-32 w-[400px] object-cover rounded mb-2">
                 <ul class="list-none p-0">
                     ${filteredAnswers.map(answer => `
-                                            <li class="mb-2 fade-in">
-                                                <button 
-                                                    class="answer-button" 
-                                                    data-index="${answer.is_correct ? 'correct' : 'wrong'}" 
-                                                    data-correct="${answers.find(a => a.is_correct).response}">
-                                                    ${answer.response}
-                                                </button>
-                                            </li>
-                                        `).join('')}
+                                                <li class="mb-2 fade-in">
+                                                    <button 
+                                                        class="answer-button" 
+                                                        data-index="${answer.is_correct ? 'correct' : 'wrong'}" 
+                                                        data-correct="${answers.find(a => a.is_correct).response}">
+                                                        ${answer.response}
+                                                    </button>
+                                                </li>
+                                            `).join('')}
                 </ul>
             `;
             }
@@ -141,26 +144,32 @@
 
                     const correctAnswer = correctAnswersList[0].response;
                     return `
-                    <div class="result-card fade-in">
+
+                    <div class="result-card fade-in ">
                         <h3 class="font-semibold">Question ${index + 1}:</h3>
                         <p class="question-text">${question.question_text}</p>
-                        <p class="text-gray-700">Réponse correcte: <strong>${correctAnswer}</strong></p>
-                    </div>
+                        <p class="text-green-700">Réponse correcte: <strong>${correctAnswer}</strong></p>
+                        <p class="text-red-700">Votre réponse: <strong> d</strong></p>
+                        </div>
                 `;
                 }).join('');
 
                 resultsContainer.innerHTML = `
-                <h2 class="text-lg font-semibold mb-2 fade-in">Quiz Terminé !</h2>
-                <p class="text-lg font-semibold mb-4 fade-in">Votre Score : ${correctAnswers} / ${questions.length}</p>
+                <h2 class="text-lg text-center font-semibold mb-2 fade-in">Quiz Terminé !</h2>
+                <p class="text-lg font-semibold text-center mb-4 fade-in">Votre Score : ${correctAnswers} / ${questions.length}</p>
                 <div class="result-grid">${resultCards}</div>
-                <button class="bg-green-500 text-white p-3 rounded hover:bg-green-600 transition duration-300 ease-in-out" id="submit-score-button">Soumettre le Score</button>
-                <button class="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300 ease-in-out" id="restart-button">Recommencer</button>
-                
-                <!-- Afficher le formulaire de soumission de texte ici -->
-                <div class="mt-8 p-6 bg-white rounded-lg shadow-md">
+                <div class="flex justify-center space-x-4">
+    <button class="bg-green-500 text-white p-3 rounded hover:bg-green-600 transition duration-300 ease-in-out" id="submit-score-button">Soumettre le resultat</button>
+    <button class="bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition duration-300 ease-in-out" id="restart-button">Recommencer</button>
+</div>
+
+<!-- Afficher le formulaire de soumission de texte ici -->
+<div class="mt-8 p-6 bg-white rounded-lg shadow-md">
     <h3 class="text-xl font-semibold mb-4 text-gray-800">Laissez un commentaire :</h3>
-    <form action="{{ route('submit.text') }}" method="POST" class="space-y-4">
+    <form action="{{ route('results.store') }}" method="POST" class="space-y-4">
         @csrf
+        <input type="hidden" name="score" id="final-score" value=""> <!-- Assurez-vous que le score est défini ici -->
+
         <textarea 
             name="text" 
             required 

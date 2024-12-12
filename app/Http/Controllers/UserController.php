@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
+use App\Models\Result;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -81,6 +83,7 @@ public function import(Request $request)
 
 public function submitText(Request $request)
 {
+    // Validation des données
     $request->validate([
         'text' => 'required|string',
         'recipient_email' => 'required|string|email',
@@ -90,6 +93,9 @@ public function submitText(Request $request)
     $submittedText = $request->input('text');
     $recipientEmail = $request->input('recipient_email'); // Récupération de l'email du destinataire
 
+    // Récupération des résultats du quiz
+    $result = Result::where('user_id', $user->id)->latest()->first(); // Adaptez cette logique selon vos besoins
+    $questions = Question::where('is_active', true)->get(); // Récupérer les questions
 
     // Envoi de l'email
     Mail::send('emails.user_notification', [
@@ -108,7 +114,7 @@ public function edit($id)
     $user = User::findOrFail($id);
 
     // Retourne la vue d'édition avec les données de l'utilisateur
-    return view('users.edit', compact('user'));
+    return view('admin.edit', compact('user'));
 }
 public function update(Request $request, $id)
 {

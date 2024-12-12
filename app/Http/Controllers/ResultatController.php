@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ResultatController extends Controller
 {
+
+    
     public function store(Request $request)
     {
         // Récupérer le score depuis la requête
